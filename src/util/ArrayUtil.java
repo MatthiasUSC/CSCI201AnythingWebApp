@@ -14,22 +14,34 @@ public final class ArrayUtil {
         final int al = arr.length;
         if(al < 1) return;
         arr[0] = val;
-        for(int i = 1;i < al;i <<= 1) {
-            final int l = al - i;
-            arraycopy(arr,0,arr,i,l < i? l : i);
-        }
+        final int l = Integer.highestOneBit(al);
+        for(int i = 1;i < l;i <<= 1) arraycopy(arr,0,arr,i,i);
+        if(al != l) arraycopy(arr,0,arr,l,al-l);
     }
     
-    public static int[] fastArrayFill(final int length,final int fill) {
+    public static void fastArrayFill(final int[] arr,final int value,final int start,final int length) {
+        arr[start] = value;
+        final int l = Integer.highestOneBit(length);
+        for(int i = 1;i < l;i <<= 1) arraycopy(arr,start,arr,start + i,i);
+        if(length != l) arraycopy(arr,start,arr,start+l,length-l);
+    }
+    public static void fastArrayFill(final float[] arr,final float value,final int start,final int length) {
+        arr[start] = value;
+        final int l = Integer.highestOneBit(length);
+        for(int i = 1;i < l;i <<= 1) arraycopy(arr,start,arr,start + i,i);
+        if(length != l) arraycopy(arr,start,arr,start+l,length-l);
+    }
+    
+    public static int[] fastArrayFill(final int length,final int value) {
         if(length < 1) return null;
         final int[] arr = new int[length];
-        for(int i = 1;i < length;i <<= 1) arraycopy(arr,0,arr,0,length < i? length : i);
+        fastArrayFill(arr,value,0,length);
         return arr;
     }
-    public static float[] fastArrayFill(final int length,final float fill) {
+    public static float[] fastArrayFill(final int length,final float value) {
         if(length < 1) return null;
         final float[] arr = new float[length];
-        for(int i = 1;i < length;i <<= 1) arraycopy(arr,0,arr,0,length < i? length : i);
+        fastArrayFill(arr,value,0,length);
         return arr;
     }
     
@@ -40,16 +52,15 @@ public final class ArrayUtil {
      * @param fills  Value to fill each array.
      */
     public static int[][] fastArrayFill(final int length,final int[] fills) {
-        if(length < 1 || fills == null) return null;
         final int[][] arr = new int[fills.length][length];
         {
             int i = -1;
             for(final int j : fills) arr[++i][0] = j;
         }
-        for(int i = 1;i < length;i <<= 1) {
-            final int l = length - i;
-            for(int j = 0;j < fills.length;++j) arraycopy(arr[j],0,arr[j],0,l < i? l : i);
-        }
+        final int l = Integer.highestOneBit(length);
+        for(int i = 1;i < l;i <<= 1) for(final int[] j : arr) arraycopy(j,0,j,i,i);
+        final int nl = length - l;
+        if(nl != 0) for(final int[] j : arr) arraycopy(j,0,j,l,nl);
         return arr;
     }
 }

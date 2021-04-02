@@ -10,11 +10,14 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+
+import util.ArrayUtil;
 
 public final class TextUtil {
     
     public static enum AlignmentX {LEFT,CENTER,RIGHT}
-    public static enum AlignmentY {HEAD,TOP,MID,LOW,FOOT}
+    public static enum AlignmentY {HEAD,TOP,MID,LOW,FOOT; public static final int N_Y = values().length;}
     
     public static final BufferedImage align(final BufferedImage img,final int w,final int h,
                                             final AlignmentX alignX,final AlignmentY alignY,
@@ -205,18 +208,19 @@ public final class TextUtil {
     }
     
     /**
-     * @param w           Bounding width
-     * @param h           Bounding height
+     * @param size        Bounding size (width,height).
      * @param outlineSize Unscaled outline size.
      * @param fill        Fill color.
      * @param outline     Outline color
      * @param f           Font.
+     * @param rs          Scaled width and height of image.
      * @param text        Text.
      * 
      * @return An image representation of the text, with an outline scaled to the
-     *         bounding size.
+     *         bounding size. The final size is returned in the <code>size</code>
+     *         array.
      */
-    public static final BufferedImage charsToImage(final int w,final int h,final double outlineSize,
+    public static final BufferedImage charsToImage(final int[] size,final double outlineSize,
                                                    final Color fill,final Color outline,
                                                    final Font f,final int style,final char...text) {
         final BufferedImage txt;
@@ -234,7 +238,7 @@ public final class TextUtil {
                         r = new TextLayout(str,derived,g.getFontRenderContext()).getBounds();
                         g.dispose();
                     }
-                    which = ((double)w / (pa = r.getWidth())) > ((double)h / (pb = r.getHeight()));
+                    which = ((double)size[0] / (pa = r.getWidth())) > ((double)size[1] / (pb = r.getHeight()));
                 }
                 /*\
                  * Calculating the scalar:
@@ -248,8 +252,18 @@ public final class TextUtil {
                  * o': scaled outline
                  * o' = o / s
                 \*/
-                final double a = (double)(which? h : w) - 2. * outlineSize;
-                scalar = (which? pb : pa) * outlineSize / (a > 0? a : 1.);
+                final double a;
+                {
+                    final double na = (double)(which? size[1] : size[0]) - 2. * outlineSize;
+                    a = na > 0.? na : 1.;
+                }
+                scalar = (which? pb : pa) * outlineSize / a;
+                
+                {
+                    final double b;
+                    size[0] = (int)((which? pa * a / pb : a) + (b = outlineSize + .5));
+                    size[1] = (int)((which? a : (pb * a / pa)) + b);
+                }
             }
             txt = new BufferedImage((int)(pa+scalar+.5),(int)(pb+scalar+.5),BufferedImage.TYPE_INT_ARGB);
         }
@@ -276,32 +290,48 @@ public final class TextUtil {
         return txt;
     }
     
+    
+    public static void copyInto(final BufferedImage s,final BufferedImage d,final int dx,final int dy) {
+        final int[] src = ((DataBufferInt) s.getRaster().getDataBuffer()).getData();
+        final int[] dst = ((DataBufferInt) s.getRaster().getDataBuffer()).getData();
+        final int w = s.getWidth(),h = s.getHeight(),dw = d.getWidth();
+        for(int y = 0,dO = dx + dy * dw,dS = 0;y < h;++y,dO += dw,dS += w) System.arraycopy(src,dS,dst,dO,w);
+    }
+    
+    /**
+     * Copies a source image into the destination with the given vertical offset.
+     * This function assumes that the source and destination have the same width.
+     * 
+     * @param s      Source image.
+     * @param d      Destination image.
+     * @param head   Header size.
+     * @param foot   Footer size.
+     * @param headBG Background for header.
+     * @param footBG Background for footer.
+     */
+    public static void copyInto(final BufferedImage s,final BufferedImage d,final int head,final int foot,
+                                final int headBG,final int footBG) {
+        final int[] dst = ((DataBufferInt)d.getRaster().getDataBuffer()).getData();
+        final int w = s.getWidth(),h = s.getHeight();
+        {
+            final int[] src = ((DataBufferInt)s.getRaster().getDataBuffer()).getData();
+            System.arraycopy(src,0,dst,head * w,h * w);
+        }
+        if(head > 0) ArrayUtil.fastArrayFill(dst,headBG,0,head * w);
+        if(foot > 0) ArrayUtil.fastArrayFill(dst,footBG,(head + h) * w,foot * w);
+    }
+    
+    /**
+     * Copies a source image into the destination with the given vertical offset.
+     * This function assumes that the source and destination have the same width and
+     * the source height is smaller than the destination height.
+     * 
+     * @param s Source image.
+     * @param d Destination image.
+     */
+    public static void copyInto(final BufferedImage s,final BufferedImage d) {
+        final int[] src = ((DataBufferInt)s.getRaster().getDataBuffer()).getData();
+        final int[] dst = ((DataBufferInt)d.getRaster().getDataBuffer()).getData();
+        System.arraycopy(src,0,dst,0,src.length);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

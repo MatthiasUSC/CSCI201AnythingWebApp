@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import image.ImageHistory;
 import image.TextUtil;
 import image.TextUtil.AlignmentX;
 import image.TextUtil.AlignmentY;
@@ -110,12 +111,12 @@ public class Main {
                 for(final AlignmentX x : AlignmentX.values())
                     img = TextUtil.align2(img,img.getWidth(),50,x,y,IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],++n,(char)('0'+n));
             n = (char)-1;
-            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.LEFT,AlignmentY.HEAD,IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
-            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.CENTER,AlignmentY.TOP,IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
-            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.RIGHT,AlignmentY.TOP,IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
-            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.LEFT,AlignmentY.FOOT,IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
-            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.CENTER,AlignmentY.LOW,IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
-            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.RIGHT,AlignmentY.LOW,IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
+            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.LEFT,  AlignmentY.HEAD,IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
+            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.CENTER,AlignmentY.TOP, IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
+            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.RIGHT, AlignmentY.TOP, IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
+            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.LEFT,  AlignmentY.FOOT,IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
+            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.CENTER,AlignmentY.LOW, IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
+            img = TextUtil.align2(img,img.getWidth(),30,AlignmentX.RIGHT, AlignmentY.LOW, IMPACT_FONT,c[0][n%5],c[1][n%5],c[2][n%2],3.5,(char)('A'+(++n)));
             final long tm = System.currentTimeMillis();
             ImageIO.write(img,"png",new File("super_happy.png"));
             final long t1 = System.currentTimeMillis();
@@ -129,8 +130,36 @@ public class Main {
     
     private static void draw5() {
         try {
-            BufferedImage img = TextUtil.charsToImage(100,100,3.5,Color.WHITE,Color.BLACK,IMPACT_FONT,Font.PLAIN,"ree".toCharArray());
+            BufferedImage img = TextUtil.charsToImage(new int[] {100,100},3.5,Color.WHITE,Color.BLACK,IMPACT_FONT,Font.PLAIN,"ree".toCharArray());
             ImageIO.write(img,"png",new File("text2.png"));
+        } catch(final IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private static void draw6() {
+        try {
+            final ImageHistory ih = new ImageHistory(ImageIO.read(Registry.getResource("IMG-0111.JPG").toFile()));
+            ImageIO.write(ih.getImage(),"png",new File("test/debug.png"));
+            final Color f = Color.WHITE,o = Color.BLACK;
+            ih.pushState(AlignmentY.TOP,AlignmentX.LEFT,50,3.5,f,o,null,null,IMPACT_FONT,Font.PLAIN,"test a1".toCharArray());
+            ih.pushState(AlignmentY.MID,AlignmentX.CENTER,50,3.5,f,o,null,null,IMPACT_FONT,Font.PLAIN,"test a2".toCharArray());
+            ih.pushState(AlignmentY.LOW,AlignmentX.RIGHT,50,3.5,f,o,null,null,IMPACT_FONT,Font.PLAIN,"test a3".toCharArray());
+            ImageIO.write(ih.getImage(),"png",new File("test/test_a.png"));
+            ih.pushState(AlignmentY.TOP,AlignmentX.RIGHT,40,3.5,f,o,null,null,IMPACT_FONT,Font.PLAIN,"test b1".toCharArray());
+            ih.pushState(AlignmentY.MID,AlignmentX.CENTER,40,3.5,f,o,null,null,IMPACT_FONT,Font.PLAIN,"test b2".toCharArray());
+            ImageIO.write(ih.getImage(),"png",new File("test/test_b.png"));
+            ih.undo();
+            ImageIO.write(ih.getImage(),"png",new File("test/test_c.png"));
+            ih.redo();
+            ImageIO.write(ih.getImage(),"png",new File("test/test_d.png"));
+            ih.pushState(AlignmentY.HEAD,AlignmentX.CENTER,30,3.5,f,o,null,null,IMPACT_FONT,Font.PLAIN,"test e1".toCharArray());
+            ImageIO.write(ih.getImage(),"png",new File("test/test_e.png"));
+            ih.undo();
+            ih.pushState(AlignmentY.FOOT,AlignmentX.CENTER,30,3.5,f,o,Color.CYAN,Color.YELLOW,IMPACT_FONT,Font.PLAIN,"test f1".toCharArray());
+            ImageIO.write(ih.getImage(),"png",new File("test/test_f.png"));
+            ih.pushState(AlignmentY.HEAD,AlignmentX.CENTER,30,3.5,f,o,Color.CYAN,Color.YELLOW,IMPACT_FONT,Font.PLAIN,"test g1".toCharArray());
+            ImageIO.write(ih.getImage(),"png",new File("test/test_g.png"));
         } catch(final IOException e) {
             e.printStackTrace();
         }
@@ -141,7 +170,8 @@ public class Main {
         //draw2();
         //draw3();
         //draw4();
-        draw5();
+        //draw5();
+        draw6();
     }
 }
 

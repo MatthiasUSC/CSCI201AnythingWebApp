@@ -1,22 +1,14 @@
 package util;
 
-public class LazilyLoadedObject<T> {
-    public interface Copier<T> {void copy(final T src,final T dst);}
-    public interface Instantiator<T> {T create();}
-    public interface Mutator<T> {void mutate(final T value);}
+public abstract class LazilyLoadedObject<V> {
+    public static interface Mutator<V> {void mutate(final V v);}
     
-    private T value = null;
+    protected V v = null;
     private boolean lazy = true;
-    private LazilyLoadedObject<T> previous;
-    private Copier<T> copier;
-    private Instantiator<T> instantiator;
+    protected LazilyLoadedObject<V> p;
     
-    public LazilyLoadedObject(final LazilyLoadedObject<T> previous,
-                              final Copier<T> copier,
-                              final Instantiator<T> instantiator) {
-        this.previous = previous;
-        this.copier = copier;
-        this.instantiator = instantiator;
+    public LazilyLoadedObject(final LazilyLoadedObject<V> previous) {
+        p = previous;
     }
     
     /*\
@@ -52,17 +44,14 @@ public class LazilyLoadedObject<T> {
      * }
     \*/
     
-    private void init() {
+    protected abstract void init();
+    public V read() {
+        if(v != null) return v;
+        if(p != null) return v = p.read();
         lazy = false;
-        value = instantiator.create();
-    }
-    public T read() {
-        if(value != null) return value;
-        if(previous != null) return value = previous.read();
         init();
-        return value;
+        return v;
     }
-    
     
     /*\
      * Lazy mutating:
@@ -70,67 +59,8 @@ public class LazilyLoadedObject<T> {
      * state or be copied from a previous state before being mutable.
     \*/
     
-    private void cpy() {
-        if(previous != null) copier.copy(previous.read(),value);
-        else init();
-    }
-    public void write(final Mutator<T> m) {
-        if(lazy) {lazy = false; cpy();}
-        m.mutate(value);
-    }
-    public void set(final T value) {
-        lazy = false;
-        this.value = value;
-    }
+    protected abstract void cpy();
+    private void icpy() {if(p == null) init(); else cpy();}
+    public void write(final Mutator<V> m) {if(lazy) {lazy = false; icpy();} m.mutate(v);}
+    public void set(final V v) {lazy = false; this.v = v;}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
