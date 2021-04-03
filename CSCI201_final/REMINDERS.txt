@@ -1,0 +1,30 @@
+Good resources:
+https://docs.oracle.com/javaee/5/tutorial/doc/bnaff.html (In-depth tutorial)
+https://stackoverflow.com/questions/7213541/what-is-java-servlet (What is a servlet, multiple good answers)
+
+Notes (might have errors so double check):
+Apache Tomcat is Java Servlet/Web container.
+A servlet is a class that manages a specific HTTP request, and sends the intended response back
+You code the servlets, and Apache Tomcat uses them when it runs as a web server.
+
+Basically, Tomcat is a program that runs on a server that waits for HTTP requests and calls/instantiates(I think) a servlet that handles the request,
+tells Tomcat what to send back (HTML file, images, etc.) to the client that sent the request, and Tomcat does that.
+
+
+Simplified step-by-step process of browser/server communication
+1. Type in url in web browser and press enter
+1. Web browser sends HTTP request string to server
+3. Tomcat has polling loop listening, gets request, parses it into class, does error handling, etc.
+4. Tomcat then calls/invokes a servlet class (that you coded) that handles that request
+5. Servlet runs, generates a response, and gives Tomcat that response.
+6. Tomcat sends that response back to the client.
+
+
+|Web browser| <-HTTP-> |Tomcat| <-Calls through code-> |Servlets| <-Calls through code-> |MongoDB code| <-HTTP?-> |MongoDB cloud|
+
+we code                                                  this^                              and this^ 
+
+File structure:
+Servlets, java util/tools, and web app java code go in Java Resources/src
+Client-side code (CSS, HTML, JS) goes into WebContent/WEB-INF (I think) (except for index.html)
+Client-side resources (Images and XMLs) go into WEB-INF also
