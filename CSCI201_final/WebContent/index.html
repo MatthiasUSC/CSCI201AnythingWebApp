@@ -2,10 +2,17 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Hello World!</title>
+<title>Prototype Login Page</title>
 </head>
 <body>
-<h1>Placeholder heading</h1>
-<p>Placeholder paragraph</p>
+<h1>Enter username and password to login.</h1>
+<p>Right now there is only 2 accounts in a static arraylist I made which the servlet is querying from: (root, root) and (user1, pass1)</p>
+<form action="LoginServlet" method="post">
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username"><br><br>
+  <label for="userpass">Password:</label>
+  <input type="text" id="userpass" name="userpass"><br><br>
+  <input type="submit" value="Login">
+</form>
 </body>
 </html>

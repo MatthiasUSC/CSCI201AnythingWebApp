@@ -1,0 +1,4 @@
+1. Make sure Apache Tomcat is installed
+2. Make sure eclipse workspace has webdev plugins
+3. Right click on CSCI201_final and click Run as>Server
+4. Use Tomcat 9.0 server

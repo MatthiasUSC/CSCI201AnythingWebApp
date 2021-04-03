@@ -11,6 +11,17 @@ Basically, Tomcat is a program that runs on a server that waits for HTTP request
 tells Tomcat what to send back (HTML file, images, etc.) to the client that sent the request, and Tomcat does that.
 
 
+Important Servlet Methods:
+
+init() is called once when tomcat invokes it to handle a request. You can use servlet constructor to initialize variables, but it is considered good practice to use init() instead. Source: https://stackoverflow.com/questions/2381976/why-can-not-we-call-servlet-constructor-instead-of-init-method-to-initialize-the
+destroy() (acts like a destructor to close resources servlet uses)
+doGet() is called (by tomcat) whenever the browser sends a GET request to the specified servlet path
+doPost() is called (by tomcat) whenever the browser sends a POST request to the specified servlet path
+doDelete() and doPut()
+
+Also, servlets can instantiate/call other servlets in those functions (through requestdispatchers and forward)
+
+
 Simplified step-by-step process of browser/server communication
 1. Type in url in web browser and press enter
 1. Web browser sends HTTP request string to server
