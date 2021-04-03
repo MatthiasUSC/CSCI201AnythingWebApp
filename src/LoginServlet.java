@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class TestServlet
- */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -45,18 +42,13 @@ public class LoginServlet extends HttpServlet {
 		LoginInfo login = new LoginInfo(n, p);
 
 		if (isValidLogin(login)) {
-			out.print("Correct username and password!");
-			RequestDispatcher rd = request.getRequestDispatcher("index.html");
+			// Sends user to homepage
+			RequestDispatcher rd = request.getRequestDispatcher("homepage.html");
 			rd.include(request, response);
-			/*
-			 * // Enables new servlet to send to new page or something RequestDispatcher
-			 * rd=request.getRequestDispatcher("servlet2"); rd.forward(request,response);
-			 */
 		} else {
 			// Sends back to index.html
-			out.print("Sorry username or password is incorrect.");
-			RequestDispatcher rd = request.getRequestDispatcher("index.html");
-			rd.include(request, response);
+			out.print("Sorry username or password is incorrect."); RequestDispatcher rd =
+			request.getRequestDispatcher("index.html"); rd.include(request, response);
 		}
 		out.close();
 		doGet(request, response);

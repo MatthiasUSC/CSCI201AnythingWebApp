@@ -1,6 +1,7 @@
 Good resources:
 https://docs.oracle.com/javaee/5/tutorial/doc/bnaff.html (In-depth tutorial)
 https://stackoverflow.com/questions/7213541/what-is-java-servlet (What is a servlet, multiple good answers)
+https://www.tutorialspoint.com/servlets/ (Servlet tutorials)
 
 Notes (might have errors so double check):
 Apache Tomcat is Java Servlet/Web container.
@@ -20,6 +21,9 @@ doPost() is called (by tomcat) whenever the browser sends a POST request to the 
 doDelete() and doPut()
 
 Also, servlets can instantiate/call other servlets in those functions (through requestdispatchers and forward)
+
+Also, servlets are not unique for each client. For each type of servlet, there is a single instance running that all client requests (that are directed at that type of servlet) go through.
+Good picture explaining this^: https://www.tutorialspoint.com/servlets/images/servlet-lifecycle.jpg
 
 
 Simplified step-by-step process of browser/server communication
