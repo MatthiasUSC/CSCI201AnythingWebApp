@@ -8,19 +8,27 @@ Apache Tomcat is Java Servlet/Web container.
 A servlet is a class that manages a specific HTTP request, and sends the intended response back
 You code the servlets, and Apache Tomcat uses them when it runs as a web server.
 
-Basically, Tomcat is a program that runs on a server that waits for HTTP requests and calls/instantiates(I think) a servlet that handles the request,
+Basically, Tomcat is a program that runs on a server that waits for HTTP requests and calls a servlet that handles the request, which
 tells Tomcat what to send back (HTML file, images, etc.) to the client that sent the request, and Tomcat does that.
 
 
 Important Servlet Methods:
 
-init() is called once when tomcat invokes it to handle a request. You can use servlet constructor to initialize variables, but it is considered good practice to use init() instead. Source: https://stackoverflow.com/questions/2381976/why-can-not-we-call-servlet-constructor-instead-of-init-method-to-initialize-the
+init() is called once at the start of server initialization. You can use servlet constructor to initialize variables, but it is considered good practice to use init() instead. Source: https://stackoverflow.com/questions/2381976/why-can-not-we-call-servlet-constructor-instead-of-init-method-to-initialize-the
 destroy() (acts like a destructor to close resources servlet uses)
+
 doGet() is called (by tomcat) whenever the browser sends a GET request to the specified servlet path
+- "GET requests a representation of the specified resource. 
+Note that GET should not be used for operations that cause side-effects,
+such as using it for taking actions in web applications."
+
 doPost() is called (by tomcat) whenever the browser sends a POST request to the specified servlet path
+- "POST submits data to be processed (e.g., from an HTML form) to the identified resource. 
+The data is included in the body of the request. 
+This may result in the creation of a new resource or the updates of existing resources or both."
 doDelete() and doPut()
 
-Also, servlets can instantiate/call other servlets in those functions (through requestdispatchers and forward)
+Also, servlets can call other servlets in those functions (through requestdispatchers and forward)
 
 Also, servlets are not unique for each client. For each type of servlet, there is a single instance running that all client requests (that are directed at that type of servlet) go through.
 Good picture explaining this^: https://www.tutorialspoint.com/servlets/images/servlet-lifecycle.jpg
@@ -30,7 +38,7 @@ Simplified step-by-step process of browser/server communication
 1. Type in url in web browser and press enter
 1. Web browser sends HTTP request string to server
 3. Tomcat has polling loop listening, gets request, parses it into class, does error handling, etc.
-4. Tomcat then calls/invokes a servlet class (that you coded) that handles that request
+4. Tomcat then calls a servlet class (that you coded) that handles that request
 5. Servlet runs, generates a response, and gives Tomcat that response.
 6. Tomcat sends that response back to the client.
 
