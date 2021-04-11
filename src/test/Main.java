@@ -12,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -20,6 +21,7 @@ import image.TextUtil;
 import image.TextUtil.AlignmentX;
 import image.TextUtil.AlignmentY;
 import resources.Registry;
+import util.container.LightweightStack;
 
 public class Main {
     private static void drawString(final double x,final double y,
