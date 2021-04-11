@@ -1,3 +1,4 @@
+package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,13 +10,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import data.LoginInfo;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static ArrayList<LoginInfo> loginEntries = new ArrayList<LoginInfo>();
 	static {
-		// Init test entires
+		// Init test entries
 		loginEntries.add(new LoginInfo("root", "root"));
 		loginEntries.add(new LoginInfo("user1", "pass1"));
 	}
@@ -42,6 +46,11 @@ public class LoginServlet extends HttpServlet {
 		LoginInfo login = new LoginInfo(n, p);
 
 		if (isValidLogin(login)) {
+			// Stores username password to session
+			HttpSession session = request.getSession();
+			session.setAttribute("username", n);
+			session.setAttribute("userpass", p);
+			
 			// Sends user to homepage
 			RequestDispatcher rd = request.getRequestDispatcher("homepage.html");
 			rd.include(request, response);

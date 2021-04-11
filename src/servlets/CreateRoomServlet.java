@@ -1,4 +1,4 @@
-
+package servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class JoinRoomServlet
+ * Servlet implementation class CreateRoomServlet
  */
-@WebServlet("/JoinRoomServlet")
-public class JoinRoomServlet extends HttpServlet {
+@WebServlet("/CreateRoomServlet")
+public class CreateRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public JoinRoomServlet() {
+    public CreateRoomServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
