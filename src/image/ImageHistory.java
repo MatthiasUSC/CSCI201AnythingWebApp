@@ -96,20 +96,11 @@ public class ImageHistory {
     private final int bw,bh;
     private int head = 0,foot = 0;
     
-    private static final int[] ACCEPTABLE_TYPES = new int[] {BufferedImage.TYPE_INT_ARGB,
-                                                             BufferedImage.TYPE_INT_ARGB_PRE,
-                                                             BufferedImage.TYPE_INT_BGR,
-                                                             BufferedImage.TYPE_INT_RGB};
     private static final int DEFAULT_TYPE = BufferedImage.TYPE_INT_ARGB;
-    private static boolean acceptable(final int type) {
-        for(final int t : ACCEPTABLE_TYPES) if(type == t) return true;
-        return false;
-    }
     
     public ImageHistory(final BufferedImage base) {
         bw = base.getWidth(); bh = base.getHeight();
         this.base = new BufferedImage(bw,bh,DEFAULT_TYPE);
-        //if(acceptable(base.getType()))
         if(base.getType() == DEFAULT_TYPE) TextUtil.copyInto(base,this.base);
         else {
             final Graphics2D g = this.base.createGraphics();
