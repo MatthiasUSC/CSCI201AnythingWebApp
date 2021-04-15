@@ -1,0 +1,46 @@
+<!Doctype html>
+
+<html>
+<head>
+
+<title>Create Room</title>
+
+<script type="text/javascript">
+	const realFileBtn = document.getElement;
+	const fileBtn = $("choose-file-button");
+	
+	fileBtn.addEventListner("click", function() {
+		
+		realFileBtn.click();
+		
+	});
+
+</script>
+
+
+</head>
+
+<body>
+
+	<div class="specs-container">
+		<form action="CreateRoomServlet" method="POST">
+			<input type="file" id="file-input" hidden="hidden"/>
+			<button type="button" id="choose-file-button">Select File</button>
+		
+		</form>
+	
+	
+	
+	
+	
+	</div>
+
+
+
+
+
+
+</body>
+
+
+</html>
