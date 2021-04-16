@@ -5,27 +5,93 @@
 
 <title>Create Room</title>
 
-<!-- <script type="text/javascript">
-	const realBtn = document.getElementById("file-input");
-	const fakeBtn = document.getElementById("choose-file-button");
-	
-	fakeBtn.onclick = function () {
-		realBtn.click();
+ 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<style>
+
+	* {
+		margin-left: 5px;
+	}
+	.image-preview {
+		
+		width : 300px;
+		min-height : 100px;
+		border : 2px solid #dddddd;
+		margin-top: 15px;
+		margin-bottom: 15px;
+		
+		display: block;
+		float : left;
+		
 	}
 
-</script>
- -->
+	.img-preview__text {
+		color : #cccccc;
+	}
+	
+	.img-preview__img {
+	
+		display : none;
+		width : 100%;
+	}
+
+	.specs-container {
+		display: flex;
+	}
+
+	.choose-image {
+
+		display : block;
+		width : 100%;
+		
+	}
+
+	.settings-container {
+		display : block;
+		width : 100%;
+
+	}
+
+
+</style>
+
+
 
 </head>
 
 <body>
 
+	<h1 style="text-align: center">Create a Game</h1>
+
 	<div class="specs-container">
 		<form action="CreateRoomServlet" method="POST">
-			<input type="file" id="file-input"/>
-<!-- 			<button type="button" id="choose-file-button">Select File</button>  -->
-			<input type="text" id=""
-		
+			<h2>Upload Images</h2>
+			<p>Choose custom images to be used in-game!</p>
+			<div class="choose-image">
+				<input type="file" id="file-input"/> <br> <br>
+	<!-- 			<button type="button" id="choose-file-button">Select File</button>  -->
+					<div class="image-preview" id="imagePreview"> 
+
+						<span class="img-preview__text">Image Preview</span>
+						<img src="" alt="Image Preview" class="img-preview__img"> 
+					</div>
+			</div>
+			<div class="settings-container">
+				<h2>Game Settings</h2>
+				<p>Customize your game settings!</p>
+				<h5>Room Code</h5>
+				<input type="text" id="roomCode" placeholder="666" style="margin-bottom: 15px"/>
+				<h5>Round Length</h5>
+				<select id="round-length">
+					<option id="round-one-minute">1 minute</option>
+					<option id="round-two-minutes">2 minutes</option>
+					<option id="round-five-minutes">5 minutes</option>
+				</select>
+
+			</div>
 		</form>
 	
 	
@@ -34,7 +100,49 @@
 	
 	</div>
 
+	<script type="text/javascript">
+		var imageArray = new Array();
+		const imageUploadBtn = document.getElementById("file-input");
+		const previewContainer = document.getElementById("imagePreview");
+		const previewImage = previewContainer.querySelector(".img-preview__img");
+		const previewImageText = previewContainer.querySelector(".img-preview__text");
+		var imageList = [];
+		
+		imageUploadBtn.addEventListener("change", function () {
+			const file = this.files[0];
+			
+			if (file) {
+				const reader = new FileReader();
+				
+				previewImageText.style.display = "none";
+				previewImage.style.display = "block";
+				
+				reader.addEventListener("load", function () {
+					previewImage.setAttribute("src", this.result);
+				});
+				
+				reader.readAsDataURL(file);
+				addImage(file);
+			}
+		});
+		
 
+	 	function addImage(file) {
+			imageList.push(file);
+			console.log(imageList);
+		}
+		
+		// function sendInfo() {
+		// 	$.ajax ({
+		// 		url: "CreateRoomServlet",
+		// 		data : {
+					
+		// 		}
+				
+		// 	})
+			
+		// } 
+	</script>
 
 
 
