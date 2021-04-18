@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
  
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/SignUpServlet")
+public class SignUpServlet extends HttpServlet {
  
     private static final long serialVersionUID = 1L;
  
@@ -21,18 +21,18 @@ public class LoginServlet extends HttpServlet {
  
         // Reading post parameters from the request
         String param1 = req.getParameter("login_id"), 
-                param2 = req.getParameter("login_pwd");
+                param2 = req.getParameter("login_pwd"),
+        		 param3 = req.getParameter("email");
  
         // Checking for null and empty values
-        if(param1 == null || param2 == null || "".equals(param1) || "".equals(param2)) {
+        if(param1 == null || param2 == null || param3 == null || "".equals(param1) || "".equals(param2) || "".equals(param3)) {
             req.setAttribute("error_message", "Please enter username and password.");
             req.getRequestDispatcher("/whatever the html is").forward(req, resp);
         } else {
             boolean isUserFound = Util.findUser(param1, param2);
-            if(isUserFound) {               
-                req.getRequestDispatcher("/whatever the html is").forward(req, resp);
+            if(isUserFound) {          
+            	req.setAttribute("error_message", "An account with thse credentials already exist.");
             } else {
-                req.setAttribute("error_message", "Invalid credentials.");
                 req.getRequestDispatcher("/whatever the html is").forward(req, resp);
             }   
         }       
