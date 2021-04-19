@@ -3,8 +3,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-import data.Game;
-import data.Player;
+import deprecated.Game;
+import deprecated.Player;
 
 
 
