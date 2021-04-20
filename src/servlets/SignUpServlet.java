@@ -1,5 +1,5 @@
-package com.jcg.mongodb.servlet;
- 
+package servlets;
+
 import java.io.IOException;
  
 import javax.servlet.ServletException;
@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import util.MongoDBUtil;
  
 @WebServlet("/SignUpServlet")
 public class SignUpServlet extends HttpServlet {
@@ -29,7 +31,7 @@ public class SignUpServlet extends HttpServlet {
             req.setAttribute("error_message", "Please enter username and password.");
             req.getRequestDispatcher("/whatever the html is").forward(req, resp);
         } else {
-            boolean isUserFound = Util.findUser(param1, param2);
+            boolean isUserFound = MongoDBUtil.findUser(param1, param2);
             if(isUserFound) {          
             	req.setAttribute("error_message", "An account with thse credentials already exist.");
             } else {

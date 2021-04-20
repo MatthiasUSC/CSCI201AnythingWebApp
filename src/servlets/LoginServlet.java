@@ -1,5 +1,5 @@
-package com.jcg.mongodb.servlet;
- 
+package servlets;
+
 import java.io.IOException;
  
 import javax.servlet.ServletException;
@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import util.MongoDBUtil;
  
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
@@ -28,7 +30,7 @@ public class LoginServlet extends HttpServlet {
             req.setAttribute("error_message", "Please enter username and password.");
             req.getRequestDispatcher("/whatever the html is").forward(req, resp);
         } else {
-            boolean isUserFound = Util.findUser(param1, param2);
+            boolean isUserFound = MongoDBUtil.findUser(param1, param2);
             if(isUserFound) {               
                 req.getRequestDispatcher("/whatever the html is").forward(req, resp);
             } else {

@@ -1,12 +1,12 @@
-package com.jcg.mongodb.servlet;
- 
+package util;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
  
-public class Util {
+public class MongoDBUtil {
  
     // Method to search a user in the mongodb
     @SuppressWarnings("deprecation")
