@@ -7,8 +7,6 @@ import java.util.TreeMap;
 import game.Player;
 import game.Room;
 
-
-
 public class GameManager {
 	
 	public class GameNotFoundException extends RuntimeException {}
