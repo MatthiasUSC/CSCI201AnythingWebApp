@@ -97,6 +97,10 @@ public class Room {
     private void onEnd() {
         state = State.END;
     }
+    
+    public BufferedImage[] getImages() {
+    	return images;
+    }
 }
 
 

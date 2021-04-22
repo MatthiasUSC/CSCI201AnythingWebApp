@@ -13,19 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/LongPollServlet")
 public class LongPollServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		// wait here until Game instance updates
-		// have sessionAttribute boolean or something  (canUpdate)
-		boolean canUpdate = true;
-		while(!canUpdate) {
-			//either thread sleep here, or thread yield, sleep might be more efficient performance wise
-		}
-		canUpdate = false;
 		
-		// or just use a lock and wait() and notifyAll()
+		//TODO maybe make 
 		
-		// or just have longpoll get game state every half second or so
 		
+		// check to see if in a game
 		
 		// get game state down here
 		String gameDataJson = "";
