@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="login.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+	<div class="login-container">
+		<div class="login-html">
+			<input id="si" type="radio" name="tab" class="sign-in" checked><label for="si" class="tab">Sign In</label>
+			<input id="su" type="radio" name="tab" class="sign-up"><label for="su" class="tab">Sign Up</label>
+			<div class="login-form">
+				<div class="sign-in-form">
+					<form name="signinform" id="signinform" method="post" action="LoginServlet">
+						<div class="userinputs">
+							<label for="user" class="label">Username</label>
+							<input id="user" type="text" class="input" name="login_id">
+						</div>
+						<div class="userinputs">
+							<label for="pass" class="label">Password</label>
+							<input id="pass" type="password" class="input" data-type="password" name="login_pwd">
+						</div>
+						<div class="userinputs">	
+							<button onclick="validate()" class="button">Sign In</button>							
+							<div id="loginresult"></div>
+						</div>
+						<div class="hr"></div>
+						<script>
+							function validate(){
+								$('#signinform').submit(function(e){
+									e.preventDefault();
+									var formData=$('#signinform').serialize();
+									$.ajax({
+										url: 'LoginServlet',
+										method: 'POST',
+										data: $('#signinform').serialize(),
+										success: function(yn){
+											if(yn !== "Invalid credentials. Please try again."){
+												alert(yn);				
+											}
+											else{
+												alert(yn);
+											}
+										},
+										error: function(jqXHR, exception){
+											console.log('Error occurred!!');
+										}
+									});
+								});
+							}
+						</script>
+					</form>
+				</div>
+				<div class="sign-up-form">
+					<form name="signupform" id="signupform" method="post" action="SignUpServlet">
+						<div class="userinputs">
+							<label for="email" class="label">Email Address</label>
+							<input id="email" type="text" class="input" name="email">
+						</div>
+						<div class="userinputs">
+							<label for="user" class="label">Username</label>
+							<input id="user" type="text" class="input" name="login_id">
+						</div>
+						<div class="userinputs">
+							<label for="pass" class="label">Password</label>
+							<input id="pass" type="password" class="input" data-type="password" name="login_pwd">
+						</div>
+						<div class="userinputs">
+							<button onclick="validate2()" class="button">Sign Up</button>
+						</div>
+						<div class="hr"></div>
+						<script>
+							function validate2(){
+								$('#signupform').submit(function(e){
+									e.preventDefault();
+									var formData=$('#signupform').serialize();
+									$.ajax({
+										url: 'SignUpServlet',
+										method: 'POST',
+										data: $('#signupform').serialize(),
+										success: function(yn){
+											if(yn !== "An account with these credentials already exist."){
+												alert(yn);				
+											}
+											else{
+												alert(yn);
+											}
+										},
+										error: function(jqXHR, exception){
+											console.log('Error occurred!!');
+										}
+									});
+								});
+							}
+						</script>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
