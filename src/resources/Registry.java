@@ -36,6 +36,14 @@ public final class Registry {
     }
     
     public static final float DEFAULT_OUTLINE_SIZE = 3.5f;
+    
+    public static final Map<String,Integer> STYLES;
+    static {
+        STYLES = new TreeMap<>();
+        STYLES.put("bold",Font.BOLD);
+        STYLES.put("italic",Font.ITALIC);
+        STYLES.put("plain",Font.PLAIN);
+    }
 }
 
 

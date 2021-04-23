@@ -32,24 +32,7 @@ public class GameServlet extends HttpServlet {
 		// TODO check if in room
 		// return error if not in room and have player
 		
-		/*String operation request.getParameter("op");
-		switch(operation) {
-			case Operations.SUBMIT_IMAGE:
-				request.getRequestDispatcher("SubmitImageServlet").forward(request, response);
-				return;
-			case Operations.JUDGE_IMAGE:
-				request.getRequestDispatcher("JudgeImageServlet").forward(request, response);
-				return;
-			case Operations.PREVIEW_MEME:
-				request.getRequestDispatcher("PreviewMemeServlet").forward(request, response);
-				return;
-			case Operations.LEAVE_ROOM:
-				request.getRequestDispatcher("LeaveRoomServlet").forward(request, response);
-				return;
-			default:
-				//Return error, bad op
-				return;
-		}*/
+		
 		try {Operations.valueOf(request.getParameter("op")).forward(request,response);}
 		catch(IllegalArgumentException|NullPointerException e) {
 		    //TODO catch if "op" param is not in the enum

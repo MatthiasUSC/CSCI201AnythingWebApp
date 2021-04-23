@@ -1,6 +1,9 @@
 package game;
 
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import util.container.BitSet;
@@ -9,6 +12,8 @@ public class Room {
     private static final short MAX_CODE = 10000;
     private static short CODE = 0;
     private static final BitSet ALLOCATED = new BitSet(MAX_CODE);
+    private static final Map<Short,Room> LOBBIES = new HashMap<>();
+    private static final Map<UUID,Room> REGISTRY = new HashMap<>();
     
     byte add = 0,ready = 0,round = 0,judge = 0,winner = -1;
     final BufferedImage[] images;
@@ -22,7 +27,9 @@ public class Room {
     
     public static synchronized Room createRoom(final byte size,final long timeLimit,final byte rounds,
                                                final BufferedImage[] images) {
-        return new Room(size,timeLimit,rounds,images);
+        final Room r = new Room(size,timeLimit,rounds,images);
+        LOBBIES.put(r.code,r);
+        return r;
     }
     private Room(final byte size,final long timeLimit,final byte rounds,final BufferedImage[] images) {
         code = ALLOCATED.setNextFalse(CODE);
@@ -47,6 +54,8 @@ public class Room {
         this.rounds = rounds;
     }
     
+    public static synchronized Room getLobby(final short code) {return LOBBIES.get(code);}
+    
     public synchronized Player addPlayer() throws InterruptedException {
         if(state == State.LOBBY && add < players.length) {
             players[add] = new Player(this,add);
@@ -67,6 +76,12 @@ public class Room {
     }
     
     void run() throws InterruptedException {
+        {
+            final UUID id = UUID.randomUUID();
+            REGISTRY.put(id,this);
+        }
+        LOBBIES.remove(code);
+        ALLOCATED.clear(code);
         synchronized(this) {
             state = State.START;
             notifyAll();
@@ -101,6 +116,8 @@ public class Room {
     public BufferedImage[] getImages() {
     	return images;
     }
+    
+    public synchronized State getState() {return state;}
 }
 
 

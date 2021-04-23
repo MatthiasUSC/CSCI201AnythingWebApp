@@ -1,10 +1,7 @@
 package contextAttributes;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
-import game.Player;
 import game.Room;
 
 public class GameManager {
@@ -15,7 +12,7 @@ public class GameManager {
 	private long nextGameCode;
 	
 	public GameManager() {
-		games = new TreeMap<Long, Room>();
+		games = new HashMap<Long, Room>();
 		nextGameCode = 0;
 	}
 	
