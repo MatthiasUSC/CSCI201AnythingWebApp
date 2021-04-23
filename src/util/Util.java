@@ -1,4 +1,5 @@
-package com.jcg.mongodb.servlet;
+//package com.jcg.mongodb.servlet;
+package util;
  
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
