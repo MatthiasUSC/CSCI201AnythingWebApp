@@ -21,7 +21,7 @@ public class ContextInitializerListener implements ServletContextListener {
 	//TODO also gotta look up whether it is better to have single constant file, or should constants be declared only in the classes they are needed in
     public void contextInitialized(ServletContextEvent sce)  { 
         ServletContext servletContext = sce.getServletContext();
-        servletContext.setAttribute(ContextAttributeKeys.GAME_MANAGER, new GameManager());
+        servletContext.setAttribute(ContextAttributeKeys.GameManager.toString(), new GameManager());
     }
 	
 }
