@@ -1,83 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Anything Active Game</title>
+    <meta charset="utf-8" />
+    <title></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    
 
-    <script>
-        function makeNewPlayerCard(playername_) {
-            var cardHtml = "<div id='playercard_" + playername_ + " style= 'height:100px; width : 250px; margin : 10px; text-align : center; background-color : #FFB6C1;'>";
-            cardHtml += "<h5><strong>" + playername_ + "</strong></h5>";
-            cardHtml += "</div>"
-
+    <style type="text/css">
+        #game-window {
+            height : 100%;
+            width : 100%;
+            display : flex;
+            justify-content : center;
+            padding : 20px;
         }
 
-        function addPlayerToLobby(playername) {
-            var playerCard = makeNewPlayerCard(playername);
-            $('#waiting_lobby').append(playerCard);
+        body {
+            background-color : lightpink;
         }
+    </style>
 
-        function show(param_div_id) {
-            document.getElementById('main_container_inner').innerHTML = document.getElementById(param_div_id).innerHTML;
-        }
-
-        // Image Manip
-        function changeTextSize() {
-            var textSize = $('#edit_text_size')[0].value;
-            console.log("Changed font size to " + textSize);
-        } 
-
-    </script>
-
-    
 </head>
 <body>
-    <div id="main_container" style="margin : 0 auto; height:1000px; width:1000px;">
-        <h1 style="text-align : center;">Game Lobby</h1>
-        <div id="main_container_inner" style="height:100%; width:100%; border: solid black 2px"></div>
-    </div>
-
-    <button onclick="show('waiting_lobby');">Replace to lobby</button>
-    <button onclick="show('game_starting');">Replace to game starting</button>
-    <button onclick="show('image_editing');">Replace to image editing</button>
-
-
-    <div id="waiting_lobby" style=“display:none” hidden>
-        <h3>Waiting for all players to join..</h3>
-    </div>
-
-    <div id="game_starting" style="display:none;" hidden>
-        <div style="margin : 0 auto; height : 100%; width : 100%; background-color : mediumseagreen; color : black; text-align : center;">
-            <h1>Starting Game!</h1>
+    
+    <div id="window-container" style="height : 1000px; width : 1000px; margin : 0 auto;">
+        <div id="game-window">
+            <button id="toggle-editing" onclick="toggleEditing();" style="height:10px; width:10px;"></button>
         </div>
+
+        <iframe id="image-edit-window" src="./Game-Windows/imageEditing.html" style="display:none; height: 100%; width:100%;"></iframe>
+
+        
+
     </div>
 
-    <div id="image_editing" style=“display:none” hidden>
-        <div id="editing_window" style="overflow : auto; margin : 0 auto; height : 70%; width : 70%; background-color : dimgrey; text-align : center;">
-            <!--<div id="image_display" style="overflow : auto; height : 500px; width: 500px; position : relative">
-                <img id="displayed-image" src=""/ style="height: 70%; width:70%; position:absolute ">
-            </div>-->
-
-            <label for="edit_text_size"><h3>Text Size</h3></label> <br />
-            <input type="text" id="edit_text_size" value="25" onblur="changeTextSize();" placeholder="25" /> <br />
-            <label for="text-box-button"><h3>Add Text Box</h3></label> <br />
-            <input type="button" id="text-box-button" onclick="addTextBox();" value="Add Text Box"/> <br />
-
-            <input type="text" id="text-box-field" style="border-color : darkgrey; cursor : move;" draggable="true" ondrag="txtBoxDrag(event);" ondrop="txtBoxDrop(event);" hidden/>
-
-        </div>
-    </div>
-    <script type="text/javascript" src="textbox.js" ></script>
-
-    <script>show("waiting_lobby");
-        function waitForPlayers() {
-            // TODO check for new players, update 'waiting_lobby' with new player card
-        };
+    <script type="text/javascript">
+        const imageEditWindow = document.getElementById('image-edit-window');
+        const button = document.getElementById('game-window');
+        function toggleEditing() {
+            button.style.display = 'none';
+            imageEditWindow.style.display = 'initial';
+        }
     </script>
-
 </body>
 </html>

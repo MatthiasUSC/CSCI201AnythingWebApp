@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        .image-workspace {
+            height: 1000px;
+            width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            background-color: lightgrey;
+        }
+
+        .image-container {
+            height: 500px;
+            width: 500px;
+            position: absolute;
+            margin-left: 10px;
+            margin-top: 10px;
+            left: 0px;
+            background-color: white;
+            display : flex;
+            flex-direction : column;
+            justify-content : center;
+        }
+
+        .image {
+            max-height : 100%;
+            max-width : 100%;
+            position : absolute;
+            
+        }
+
+        .image-fields {
+            height : 100%;
+            width : 100%;
+            position : absolute;
+
+        }
+
+        .side-panel {
+            height: 700px;
+            width: 400px;
+            position: absolute;
+            display : flex;
+            flex-direction : column;
+            align-items : center;
+            right: 0px;
+            margin-top: 10px;
+            margin-right: 10px;
+            background-color: grey;
+            padding-top: 60px;
+        }
+
+        .editor-option {
+            height: 50px;
+            width: 100%;
+            position : relative;
+            display : block;
+            left: 0px;
+            margin: 10px;
+            background-color: darkgray;
+
+        }
+
+        .editor-text {
+            padding : 10px;
+            display : flex;
+            align-content : center;
+        }
+
+        .dropdown {
+            vertical-align : auto;
+        }
+
+        #header, #footer, #top, #bottom {
+            height: 15%;
+            width: 100%;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color : white;
+            -webkit-text-stroke-color : black;
+            -webkit-text-stroke-width : 2.5px;
+        }
+
+        #header, #footer {
+            background-color: none;
+            display : flex;
+        }
+
+        #header {
+            top: 0px;
+           
+        }
+
+        #footer {
+            bottom: 0px;
+        }
+
+        #top {
+            top: 15%;
+            border: solid black 1px;
+        }
+
+        #bottom {
+            bottom: 15%;
+            border: solid black 1px;
+        }
+
+        #middle {
+            height: 40%;
+            width: 100%;
+            position: absolute;
+            display: flex;
+            top: 30%;
+            bottom: 30%;
+            background-color: none;
+            border: solid black 1px;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            -webkit-text-stroke-color: black;
+            -webkit-text-stroke-width: 2.5px;
+        }
+
+        #panel-title {
+            position: absolute;
+            top: 0;
+        }
+
+        #input-text {
+            display : inline-block;
+            height : 100%;
+            border-radius : 6px;
+        }
+        
+    </style>
+    <script type="text/javascript">
+        const image_load = document.getElementById('loaded_image');
+        // curr image from external js script, that will be preloaded 
+        image_load.src = curr_image;
+        /*
+         *
+        const 
+        function sendData(flag, data) {
+          var ajaxData = {
+                if (flag == 'preview') {
+                    op : 'preview_meme',
+
+                }
+          }
+            $.ajax({
+                url: 'GameServlet',
+                method: 'POST'
+                data: {
+                    op : 
+                },
+                success: function (result) {
+                    // returned image data
+                    var img_obj_resp = result.JSON.parse();
+                    if (img_obj_resp.status == 0) {
+                        var img_preview = 'data:image/png;charset=utf-8;base64,' + img_obj_resp.base64Img;
+                        console.log(img_preview);
+                    }
+                    $('.image')[0].attr('source', result);
+                }
+            }); 
+        }
+        */
+    </script>
+</head>
+
+<body>
+    <div class="image-workspace">
+        <div class="image-container">
+            <img class="image" id="loaded_image" src="" />
+            <div class="image-fields">
+                <div id="header" onclick="setCurrentImageField('header');">Header</div>
+                <div id="top" onclick="setCurrentImageField('top');">Top</div>
+                <div id="middle" onclick="setCurrentImageField('middle');">Middle</div>
+                <div id="bottom" onclick="setCurrentImageField('bottom');">Bottom</div>
+                <div id="footer" onclick="setCurrentImageField('footer');">Footer</div>
+            </div>
+
+        </div>
+        <div class="side-panel">
+            <h1 id="panel-title">Editor <span id="panel-title-field"></span></h1>
+            <div class="editor-option">
+                <div class="dropdown">
+                    <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        X-Align <div class="caret"></div>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('left');">Left</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('right');">Right</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('center');">Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="editor-option">
+                <div class="dropdown">
+                    <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Size <div class="caret"></div>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontSize('sm');">Small</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontSize('md');">Medium</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontSize('lg');">Large</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="editor-option">
+                <div class="dropdown">
+                    <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Outline Size <div class="caret"></div>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('none');">None</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('light');">Light</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('regular');">Regular</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('thick');">Thick</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('fat');">Thiccccc</a></li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="editor-option">
+                <div class="dropdown">
+                    <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Font <div class="caret"></div>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontFamily('helvetica');">Helvetica</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontFamily('times');">Times New Roman</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontFamily('papyrus');">Papyrus</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="editor-option">
+                <div class="dropdown">
+                    <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Style <div class="caret"></div>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontStyle('plain');">Plain</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontStyle('bold');">Bold</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="editChangeFontStyle('italic');">Italic</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="editor-option editor-text">
+                <label for="input-text" style="font-size : 16pt; margin-right : 8px;">Text</label>
+                <input type="text" id="input-text" onblur="changeTextField();"/>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        let current_image_field;
+        const editor_panel_title = document.getElementById('panel-title-field');
+        let FIELD = 'none';
+
+        function setCurrentImageField(element_id) {
+            var element = document.getElementById(element_id);
+            current_image_field = element;
+            editor_panel_title.innerHTML = current_image_field.id;
+
+            switch (current_image_field.id) {
+                case 'header':
+                    FIELD = 'HEAD';
+                    break;
+                case 'top':
+                    FIELD = 'TOP';
+                    break;
+                case 'middle':
+                    FIELD = 'MID';
+                    break;
+                case 'bottom':
+                    FIELD = 'LOW';
+                    break;
+                case 'footer':
+                    FIELD = 'FOOT';
+                    break;
+                // If no selected field
+                default:
+                    FIELD = 'none';
+                    break;
+            }
+            console.log("Current image field: " + current_image_field.id);
+        }
+
+        function changeTextField() {
+            var inner_text = document.getElementById('input-text').value;
+            console.log(inner_text);
+            if (current_image_field != null) {
+                current_image_field.innerHTML = inner_text;
+            }
+        }
+
+        // Font Size 
+        function editChangeFontSize(sizeClass) {
+
+            if (current_image_field != null) {
+                switch (sizeClass) {
+                    case 'sm':
+                        current_image_field.style.fontSize = '10pt';
+                        break;
+                    case 'md':
+                        current_image_field.style.fontSize = '18pt';
+                        break;
+                    case 'lg':
+                        current_image_field.style.fontSize = '36pt';
+                        break;
+                }
+
+
+                /*if (sizeClass == 'sm') {
+
+                    current_image_field.style.fontSize = '10pt';
+                } */
+            }
+        }
+
+        function editChangeXAlign(alignClass) {
+            if (current_image_field != null) {
+                switch (alignClass) {
+                    case 'left':
+                        current_image_field.style.justifyContent = 'left';
+                        break;
+                    case 'right':
+                        current_image_field.style.justifyContent = 'flex-end';
+                        break;
+                    case 'center':
+                        current_image_field.style.justifyContent = 'center';
+                        break;
+                }
+            }
+        }
+
+        function editChangeFontFamily(fontClass) {
+            if (current_image_field != null) {
+                switch (fontClass) {
+                    case 'helvetica':
+                        current_image_field.style.fontFamily = 'Helvetica';
+                        break;
+                    case 'times':
+                        current_image_field.style.fontFamily = '"Times New Roman"';
+                        break;
+                    case 'papyrus':
+                        current_image_field.style.fontFamily = 'Papyrus';
+                        break;
+                }
+            }
+        }
+
+        function editChangeFontStyle(styleClass) {
+            if (current_image_field != null) {
+                switch (styleClass) {
+                    case 'plain':
+                        current_image_field.style.fontWeight = 'normal';
+                        current_image_field.style.fontStyle = 'normal';
+                        break;
+                    case 'bold':
+                        current_image_field.style.fontWeight = 'bold';
+                        break;
+                    case 'italic':
+                        current_image_field.style.fontWeight = 'normal';
+                        current_image_field.style.fontStyle = 'italic';
+                        break;
+                }
+            }
+        }
+
+        function editChangeFontOutline(outlineClass) {
+            if (current_image_field != null) {
+                switch (outlineClass) {
+                    case 'none':
+                        current_image_field.style.webkitTextStrokeWidth = '0pt';
+                        break;
+                    case 'thin':
+                        current_image_field.style.webkitTextStrokeWidth = '0.5pt';
+                        break;
+                    case 'regular':
+                        current_image_field.style.webkitTextStrokeWidth = '1pt';
+                        break;
+                    case 'thick':
+                        current_image_field.style.webkitTextStrokeWidth = '2pt';
+                        break;
+                    case 'fat':
+                        current_image_field.style.webkitTextStrokeWidth = '3pt';
+                        break;
+                }
+            }
+        }
+
+    </script>
+
+</body>
+</html>
