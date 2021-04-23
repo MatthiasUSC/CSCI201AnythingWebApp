@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Prototype Homepage</title>
+</head>
+<body>
+<h1>This is the homepage.</h1>
+
+<p>Insert room code below to join a room.</p>
+<form action="LoginServlet" method="post">
+  <label for="roomcode">Roomcode:</label>
+  <input type="text" id="roomcode" name="roomcode"><br><br>
+  <input type="submit" value="Join Room">
+</form>
+
+<p>Or create a new room here.</p>
+<form action="LoginServlet" method="post">
+  <input type="submit" value="Create Room">
+</form>
+</body>
+</html>
