@@ -115,8 +115,7 @@ public class Room {
     }
     
     public void setWinner(final byte b) throws InterruptedException {
-        //TODO judge calls this method to select winner
-        winner = b;
+        winner = unscramble[b];
         broadcast(GameState.JUDGE);
         if(++round == rounds) onEnd();
         else run();
