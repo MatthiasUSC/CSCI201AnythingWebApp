@@ -83,7 +83,8 @@
 										data: $('#signupform').serialize(),
 										success: function(yn){
 											if(yn !== "An account with these credentials already exist."){
-												alert(yn);				
+												alert(yn);		
+												$(document).load("registeredhomepage.html");
 											}
 											else{
 												alert(yn);
