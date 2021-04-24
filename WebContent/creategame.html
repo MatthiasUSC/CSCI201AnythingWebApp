@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Create Room</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style type="text/css">
+
+
+        body {
+            background-color: lightpink;
+            background-image : url("background1.jpeg");
+        }
+
+        .create-room-content {
+            display: flex;
+            position : absolute;
+            height : 85%;
+            width : 60%;
+            top : 70px;
+            padding-top : 10px;
+            background-color: white;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .create-room-option {
+            position : relative;
+            display : flex;
+            height : 100px;
+            width : 300px;
+            background-color: none;
+            flex-direction : column;
+            justify-content : center;
+        }
+
+        .create-room-input {
+            width : 50%;
+        }
+
+        
+
+        #create-game-window {
+            display: flex;
+            position: absolute;
+            top: 20px;
+            bottom: 0px;
+            width: 100%;
+            margin: 0px auto;
+            background-color: none;
+            flex-direction : column;
+            justify-content: center;
+            align-items : center;
+
+        }
+
+        #page-title {
+            position : absolute;
+            top : 0px;
+        }
+
+        #file-input {
+            position : absolute;
+            top : 0px;
+            border : none;
+        }
+
+        .image-preview {
+            position: relative;
+            height: 70%;
+            width: 50%;
+            background-color: #939ddb;
+            opacity : 0.4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .img-preview-img {
+            max-height : 100%;
+            max-width : 100%;
+            position : absolute;
+        }
+
+        .option-label {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color : dimgray;
+        }
+
+        ::-webkit-file-upload-button {
+            padding: 6px;
+            width: 100px;
+            border: none;
+            border-radius: 5px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #d4aed3;
+            color : white;
+        }
+
+        #create-button {
+            background-color: #d4aed3;
+            color: white;
+        }
+
+    </style>
+
+</head>
+<body>
+    <div id="create-game-window">
+        <h1 id="page-title">Create A Game Room</h1>
+        <div class="create-room-content">
+            <div class="create-room-option">
+                <label class="option-label" for="num-players" style="">Number of Players</label>
+                <input type="text" id="num-players" class="create-room-input" />
+            </div>
+            <div class="create-room-option">
+                <label class="option-label" for="time-limit" style="">Time Limit</label>
+                <input type="text" id="time-limit" class="create-room-input" />
+            </div>
+            <div class="create-room-option">
+                <label class="option-label" for="num-rounds" style="">Number of Rounds</label>
+                <input type="text" id="num-rounds" class="create-room-input" />
+            </div>
+            <div class="create-room-option">
+                <input type="file" id="file-input" title="   " /> <br> <br>
+                <div class="image-preview" id="imagePreview">
+                    <!--<span class="img-preview-text">Image Preview</span>-->
+                    <img src="" alt="Image Preview" class="img-preview-img">
+                </div>
+            </div>
+            <div class="create-room-option">
+                <label class="option-label" for="time-limit" style="">Room Code</label>
+                <input type="text" id="room-code" class="create-room-input" />
+            </div>
+            <div class="create-room-option">
+                <button class="btn" id="create-button" type="button" onclick="createRoom();">Create Room</button>
+            </div>
+        </div>
+        
+
+    </div>
+
+    <script type="text/javascript">
+        const imageUploadBtn = document.getElementById("file-input");
+        const previewContainer = document.getElementById("imagePreview");
+        const previewImage = previewContainer.querySelector(".img-preview-img");
+        //const previewImageText = previewContainer.querySelector(".img-preview-text");
+        var imageList = [];
+
+        imageUploadBtn.addEventListener("change", function () {
+            const file = this.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                //previewImageText.style.display = "none";
+                previewImage.style.display = "block";
+
+                reader.addEventListener("load", function () {
+                    previewImage.setAttribute("src", this.result);
+                });
+
+                reader.readAsDataURL(file);
+                addImage(file);
+            }
+        });
+
+
+        function addImage(file) {
+            imageList.push(file);
+            console.log(imageList);
+        }
+
+        function createRoom() {
+            $.ajax({
+                url: "CreateRoomServlet",
+                method: "POST",
+                data: {
+                    join_op : 'create',
+                    maxPlayers: document.getElementById('num-players').value,
+                    timeLimit: document.getElementById('time-limit').value,
+                    rounds: document.getElementById('num-rounds').value,
+                    images: imageList,
+                    room_code: document.getElementById('room-code').value
+
+                },
+                success : function (result) {
+                    var resultObj = JSON.parse(result);
+                    if (!resultObj.status) {
+                        $(this).load("gamepage.html");
+                    }
+                    else {
+                        alert("Unsuccessful Room Creation");
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
