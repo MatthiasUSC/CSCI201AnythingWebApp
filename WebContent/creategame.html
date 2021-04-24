@@ -3,24 +3,27 @@
 <head>
     <meta charset="utf-8" />
     <title>Create Room</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
 
 
         body {
             background-color: lightpink;
-            background-image : url("./images/background1.jpeg");
+            background-image: url("./images/background1.jpeg");
         }
 
         .create-room-content {
             display: flex;
-            position : absolute;
-            height : 85%;
-            width : 60%;
-            top : 70px;
-            padding-top : 10px;
+            position: absolute;
+            height: 85%;
+            width: 60%;
+            top: 70px;
+            padding-top: 10px;
             background-color: white;
             flex-direction: column;
             justify-content: center;
@@ -28,20 +31,20 @@
         }
 
         .create-room-option {
-            position : relative;
-            display : flex;
-            height : 100px;
-            width : 300px;
+            position: relative;
+            display: flex;
+            height: 100px;
+            width: 300px;
             background-color: none;
-            flex-direction : column;
-            justify-content : center;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .create-room-input {
-            width : 50%;
+            width: 50%;
         }
 
-        
+
 
         #create-game-window {
             display: flex;
@@ -51,44 +54,45 @@
             width: 100%;
             margin: 0px auto;
             background-color: none;
-            flex-direction : column;
+            flex-direction: column;
             justify-content: center;
-            align-items : center;
-
+            align-items: center;
         }
 
         #page-title {
-            position : absolute;
-            top : 0px;
+            position: absolute;
+            font-size: 14pt;
+            left: 10px;
+            top: 10px;
         }
 
         #file-input {
-            position : absolute;
-            top : 0px;
-            border : none;
+            position: absolute;
+            top: 0px;
+            border: none;
         }
 
         .image-preview {
             position: relative;
             height: 70%;
             width: 50%;
-            left : 50%;
+            left: 50%;
             background-color: #939ddb;
-            opacity : 0.4;
+            opacity: 0.4;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .img-preview-img {
-            max-height : 100%;
-            max-width : 100%;
-            position : absolute;
+            max-height: 100%;
+            max-width: 100%;
+            position: absolute;
         }
 
         .option-label {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            color : dimgray;
+            color: dimgray;
         }
 
         ::-webkit-file-upload-button {
@@ -98,7 +102,7 @@
             border-radius: 5px;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             background-color: #d4aed3;
-            color : white;
+            color: white;
         }
 
         #create-button {
@@ -111,40 +115,55 @@
         }
 
         input[type=text] {
-            height : 55px;
-            width : 300px;
-            font-size : 18pt;
+            height: 55px;
+            width: 300px;
+            font-size: 18pt;
             padding-left: 10px;
         }
 
         input::placeholder {
-            text-align : center;
-            color : lightgrey;
-            font-size : 18pt;
+            text-align: center;
+            color: lightgrey;
+            font-size: 18pt;
         }
 
         #room-code {
-            height : 65px;
+            height: 65px;
         }
-
     </style>
 
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="HomePage.html">Anything</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="HomePage.html">Home</a>
+                    <a class="nav-link" href="login.html">Log-in/Sign Up</a>
+                    <p class="heading nav-link" style="text-align: right; color: honeydew;margin:0px"></p>
+                </div>
+            </div>
+        </div>
+    </nav>
     <div id="create-game-window">
-        <h1 id="page-title">Create A Game Room</h1>
+        
         <div class="create-room-content">
+            <h1 id="page-title">Game Room Settings</h1>
             <div class="create-room-option">
                 <label class="option-label" for="num-players" style="">Number of Players</label>
-                <input type="text" id="num-players" class="create-room-input" placeholder="Number of Players"/>
+                <input type="text" id="num-players" class="create-room-input" placeholder="Number of Players" />
             </div>
             <div class="create-room-option">
                 <label class="option-label" for="time-limit" style="">Time Limit (seconds?)</label>
-                <input type="text" id="time-limit" class="create-room-input" placeholder="Time Limit"/>
+                <input type="text" id="time-limit" class="create-room-input" placeholder="Time Limit" />
             </div>
             <div class="create-room-option">
                 <label class="option-label" for="num-rounds" style="">Number of Rounds</label>
-                <input type="text" id="num-rounds" class="create-room-input" placeholder="Number of Rounds"/>
+                <input type="text" id="num-rounds" class="create-room-input" placeholder="Number of Rounds" />
             </div>
             <div class="create-room-option">
                 <input type="file" id="file-input" title="   " /> <br> <br>
@@ -155,18 +174,17 @@
             </div>
             <div class="create-room-option">
                 <label class="option-label" for="room-code" style="">Room Code</label>
-                <input type="text" id="room-code" class="create-room-input" placeholder="Room Code"/>
+                <input type="text" id="room-code" class="create-room-input" placeholder="Room Code" />
             </div>
             <div class="create-room-option">
                 <button class="btn" id="create-button" type="button" onclick="createRoom();">Create Room</button>
             </div>
         </div>
-        
+
 
     </div>
 
-    <script type="text/javascript">
-        const imageUploadBtn = document.getElementById("file-input");
+    <script type="text/javascript">const imageUploadBtn = document.getElementById("file-input");
         const previewContainer = document.getElementById("imagePreview");
         const previewImage = previewContainer.querySelector(".img-preview-img");
         //const previewImageText = previewContainer.querySelector(".img-preview-text");
@@ -247,8 +265,7 @@
                 previewContainer.style.zIndex = 'initial';
                 image_preview_active = false;
             }
-        });*/
-
-    </script>
+        });*/</script>
 </body>
 </html>
+
