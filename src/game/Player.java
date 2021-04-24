@@ -13,7 +13,7 @@ public class Player {
     
     final Room r;
     final byte id;
-    BufferedImage img = null;
+    public BufferedImage img = null;
     Player(final Room r,final byte id) {this.r = r; this.id = id;}
     
     ImageHistory round = null;
@@ -25,61 +25,10 @@ public class Player {
         return round.getImage();
     }
     
-    void lobby() throws InterruptedException {
-        if(id == 0) { // host starts game
-            //TODO wait for host to start game
-            r.run();
-        }
-        synchronized(r) {while(r.getState() == State.LOBBY) r.wait();}
-    }
-    
-    void editImage() throws InterruptedException {
-        round = new ImageHistory(r.images[r.roundImages[r.round]]);
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                while(r.getState() == game.State.START) {
-                    
-                }
-            }
-        };
-        t.start();
-        t.join(r.timeLimit);
-        if(t.isAlive()) {t.interrupt(); t.join();}
-        synchronized(this) {
-            img = round.getImage();
-            notify();
-        }
-    }
-    
-    void displayImages(final byte[] scramble) {
-        for(final Player p : r.players) {
-            if(p != Player.this) {
-                // TODO display p.img
-                p.img = null;
-            }
-        }
-    }
-    
-    void waitForJudge(final byte[] scramble) throws InterruptedException {
-        displayImages(scramble);
-        synchronized(r) {while(r.winner == -1) r.wait();}
-        //TODO highlight winner and image
-    }
-    
-    byte judge(final byte[] scramble) throws InterruptedException {
-        displayImages(scramble);
+    byte judge() throws InterruptedException {
         // If judge doesn't choose, all players will get score.
         byte selection = r.judge;
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                //TODO get selection
-            }
-        };
-        t.start();
-        t.join(JUDGE_TIMEOUT);
-        if(t.isAlive()) {t.interrupt(); t.join();}
+        //TODO get selection
         return selection;
     }
 }

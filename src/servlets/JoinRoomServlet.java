@@ -21,7 +21,7 @@ import sessionAttributes.SessionAttributeKeys;
 @WebServlet("/JoinRoomServlet")
 public class JoinRoomServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final String OP_PARAM = "op";
+    private static final String OP_PARAM = "join_op";
     private static enum Operation {create,join}
     private static final String ROOM_CODE_PARAMETER = "room_code"; // subject to change
     
@@ -38,7 +38,7 @@ public class JoinRoomServlet extends HttpServlet {
     private static interface getter<T> {T get(final String r);}
     private enum CreateRoomArg {
         maxPlayers(r -> Byte.parseByte(r)),
-        timeLimit(r -> 1000L * Integer.parseInt(r)),
+        timeLimit(r -> 1000L * Long.parseLong(r)),
         rounds(r -> Integer.parseInt(r)),
         images(r -> {
             final String[] b64 = r.split(",");
