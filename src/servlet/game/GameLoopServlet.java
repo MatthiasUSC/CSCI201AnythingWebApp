@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import game.Room;
 import sessionAttributes.SessionAttributeKeys;
 
+@Deprecated
 @WebServlet("/GameLoopServlet")
 public class GameLoopServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
