@@ -1,0 +1,3 @@
+var ROOMCODE;
+var PLAYERID;
+var IMAGES;

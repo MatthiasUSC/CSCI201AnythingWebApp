@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="js/SessionAttributes.js"></script>
+    <title>Join Game</title>
+
+    <style>
+
+        * {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-image: url("background1.jpeg");
+        }
+
+        #join-game-window {
+            display: flex;
+            position: absolute;
+            top: 20px;
+            bottom: 0px;
+            width: 100%;
+            margin: 0px auto;
+            background-color: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #join-game-content {
+            display: flex;
+            position: absolute;
+            height: 85%;
+            width: 60%;
+            top: 70px;
+            padding-top: 10px;
+            background-color: white;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #join-room-code-container {
+            position : absolute;
+            display : flex;
+            flex-direction : column;
+            justify-content : center;
+            align-items : center;
+            top : 30%;
+        }
+
+        #join-room-code {
+            height : 100px;
+            width : 400px;
+            font-size : 30pt;
+            border-radius : 10px;
+            border-color : grey;
+        }
+
+        input::placeholder {
+            text-align : center;
+            color : lightgrey;
+        }
+
+        input {
+            padding-left : 2%;
+        }
+
+        input:focus {
+            outline-color: #939ddb;
+        }
+
+        #join-button {
+            position: absolute;
+            width: 400px;
+            height : 75px;
+            top: 60%;
+            background-color: #939ddb;
+            font-size : 25pt;
+            color : white;
+        }
+
+        #navigation {
+            background-color : dimgrey;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <!--<div id="nav-container">
+        <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="HomePage.html">Anything</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link active" aria-current="page" href="HomePage.html">Home</a>
+                        <a class="nav-link" href="login.html">Log-in/Sign Up</a>
+                        <p class="heading nav-link" style="text-align: right; color: honeydew;margin:0px"></p>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>-->
+
+    <!--TODO this is a placeholder nav bar-->
+    <nav id="navigation" class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="HomePage.html" style="color:white;">Anything</a>
+    </nav>
+
+    <div id="join-game-window">
+
+        <div id="join-game-content">
+            <div id="join-room-code-container">
+                <!--<label for="join-room-code">Join Room</label>-->
+                <input type="text" id="join-room-code" placeholder="Enter Room Code" />
+            </div>
+            <button class="btn" id="join-button">Join Room</button>
+        </div>
+
+    </div>
+    <script>
+        function joinRoom() {
+            $.ajax({
+                url: 'JoinRoomServlet',
+                method: 'Post',
+                data: {
+                    join_op: 'join',
+                    room_code: document.getElementById('join-room-code').value
+                },
+                success: function (result) {
+                // if invalid roomcode 
+                if (!result) {
+                    alert("Not A Valid Room Code");
+                }
+                else {
+                    ROOMCODE = document.getElementById('join-room-code').value;
+                    $(this).load("gamepage.html");
+                }
+            }
+          });
+        }
+    </script>
+</body>
+
+
+</html>
