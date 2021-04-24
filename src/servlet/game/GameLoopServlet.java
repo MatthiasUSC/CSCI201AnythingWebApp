@@ -24,7 +24,7 @@ public class GameLoopServlet extends HttpServlet {
     
     private static interface control {void action(final Room r,final HttpServletResponse o) throws IOException;}
     private static enum Control {
-        start((r,o) -> r.start()),
+        start((r,o) -> {}/*r.start()*/),
         startImage((r,o) -> {
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write(r.getRoundImage(),"PNG",out);

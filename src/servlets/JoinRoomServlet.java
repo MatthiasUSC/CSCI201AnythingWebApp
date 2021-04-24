@@ -24,6 +24,7 @@ public class JoinRoomServlet extends HttpServlet {
     private static final String OP_PARAM = "join_op";
     private static enum Operation {create,join}
     private static final String ROOM_CODE_PARAMETER = "room_code"; // subject to change
+    private static final String NAME_PARAM = "username";
     
     private static enum Err {
         couldNotJoin,couldNotCreate;
@@ -70,7 +71,7 @@ public class JoinRoomServlet extends HttpServlet {
                 case join -> Room.getLobby(Byte.parseByte(request.getParameter(ROOM_CODE_PARAMETER)));
             };
             if(room == null) {Err.couldNotJoin.respond(response); return;}
-            final Player player = room.addPlayer();
+            final Player player = room.addPlayer(request.getParameter(NAME_PARAM));
             // link room and player to session
             final HttpSession session = request.getSession();
             session.setAttribute(SessionAttributeKeys.Room.toString(),room);
