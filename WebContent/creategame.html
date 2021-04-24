@@ -219,8 +219,8 @@
             console.log("Time: " + document.getElementById('time-limit').value);
             console.log("Rounds: " + document.getElementById('num-rounds').value);
             console.log("Room Code: " + document.getElementById('room-code').value);
-            /*$.ajax({
-                url: "CreateRoomServlet",
+            $.ajax({
+                url: "JoinRoomServlet",
                 method: "POST",
                 data: {
                     join_op : 'create',
@@ -228,7 +228,6 @@
                     timeLimit: document.getElementById('time-limit').value,
                     rounds: document.getElementById('num-rounds').value,
                     images: imageList
-                    room_code: document.getElementById('room-code').value
 
                 },
                 success : function (result) {
@@ -240,7 +239,7 @@
                         alert("Unsuccessful Room Creation");
                     }
                 }
-            });*/
+            });
         }
 
         /*var image_preview_active = false;
