@@ -16,7 +16,7 @@ public class Player {
     final byte id;
     final String name;
     public BufferedImage img = null;
-    final BlockingQueue<GameState> eventQ = new LinkedBlockingQueue<GameState>(); 
+    public final BlockingQueue<GameState> eventQ = new LinkedBlockingQueue<GameState>(); 
     Player(final Room r,final byte id,final String name) {
         this.r = r;
         this.id = id;

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import sessionAttributes.SessionAttributeKeys;
 
 interface Action {CharSequence action(final Room i) throws IOException;}
-enum GameState {
+public enum GameState {
     JOIN(r -> ',' + r.playerJSON()),
     START(r -> new StringBuilder(",\"image\":\"").append(encode(r.getRoundImage())).append('"')),
     TIMEOUT(r -> {
@@ -34,9 +34,9 @@ enum GameState {
     }
     private final Action action;
     private GameState(final Action action) {this.action = action;}
-    void toJson(final HttpServletRequest i,
-                final HttpServletResponse o)
-                throws ServletException,IOException {
+    public void toJson(final HttpServletRequest i,
+                       final HttpServletResponse o)
+                       throws ServletException,IOException {
         o.getWriter().append("{\"event\":\"")
                      .append(toString())
                      .append("\"")
