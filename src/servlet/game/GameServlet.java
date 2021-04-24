@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 public class GameServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static enum Operations {
-        submit_image(SubmitImageServlet.class),
+        //submit_image(SubmitImageServlet.class),
         judge_image(JudgeImageServlet.class),
         preview_meme(PreviewMemeServlet.class),
         leave_room(LeaveRoomServlet.class);
