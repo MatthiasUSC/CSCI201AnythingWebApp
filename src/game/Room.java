@@ -60,7 +60,21 @@ public class Room extends Thread {
     public static synchronized Room getLobby(final short code) {return LOBBIES.get(code);}
     
     public synchronized Player addPlayer() throws InterruptedException {
-        return state == GameState.LOBBY && add < players.length? players[add] = new Player(this,add) : null;
+    	
+    	if(state == GameState.LOBBY && add < players.length){
+    		Player newPlayer = new Player(this,add);
+    		players[add++] = newPlayer;
+    		
+    		/* EVENT
+             * JOIN
+             * Send player list to all players in lobby
+             */
+    		broadcastEvent(GameState.LOBBY);
+    		return newPlayer;
+    	} else {
+    		return null;
+    	}
+        
     }
     
     public void run() {
@@ -84,6 +98,12 @@ public class Room extends Thread {
     private void onStart() throws InterruptedException {
         state = GameState.START;
         
+        /* EVENT
+         * START
+         * Send selected image to all players
+         */
+        broadcastEvent(GameState.START);
+        
         //TODO long poll stuff while time limit
         TimeUnit.MILLISECONDS.sleep(timeLimit);
         state = GameState.JUDGE;
@@ -91,6 +111,13 @@ public class Room extends Thread {
         // wait for finish
         finished = new BufferedImage[scramble.length];
         for(final Player p : players) if(p.id != judge) finished[scramble[p.id]] = p.img;
+        
+        
+        /* EVENT
+         * TIMEOUT
+         * Send all images to all players
+         */
+        broadcastEvent(GameState.TIMEOUT);
     }
     
     private void onJudge() throws InterruptedException {
@@ -111,12 +138,24 @@ public class Room extends Thread {
         }
         for(byte i = 0;i < scramble.length;++i) unscramble[scramble[i]] = scramble[i] > judge? (byte)(i - 1) : i;
         //TODO put winner = players[judge].judge(); somewhere to select the judge; probs somewhere in long poll
+        
+        /* EVENT
+         * JUDGE
+         * Sends judged image to all players, also maybe each players points to update?
+         */
+         broadcastEvent(GameState.JUDGE);
     }
     
     public byte getWinner() {return winner;}
     
     private void onEnd() {
         state = GameState.END;
+        
+        /* EVENT
+         * END
+         * Sends who has the most points
+         */
+        broadcastEvent(GameState.END);
     }
     
     public BufferedImage[] getImages() {
@@ -126,6 +165,15 @@ public class Room extends Thread {
     public synchronized GameState getGameState() {return state;}
     
     public BufferedImage getRoundImage() {return images[roundImages[round]];}
+    
+    /*
+     * Sends an event to all connected players
+     */
+    private void broadcastEvent(GameState event) {
+    	for(Player p : players) {
+    		p.sendEvent(event);
+    	}
+    }
 }
 
 

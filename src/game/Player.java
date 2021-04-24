@@ -3,6 +3,8 @@ package game;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import image.ImageHistory;
 import image.TextUtil.AlignmentX;
@@ -10,6 +12,8 @@ import image.TextUtil.AlignmentY;
 
 public class Player {
     private static final long JUDGE_TIMEOUT = 60L*1000L;
+    
+    public final BlockingQueue<GameState> eventQueue = new LinkedBlockingQueue<GameState>();
     
     final Room r;
     final byte id;
@@ -30,6 +34,10 @@ public class Player {
         byte selection = r.judge;
         //TODO get selection
         return selection;
+    }
+    
+    public void sendEvent(GameState event) {
+    	eventQueue.add(event);
     }
 }
 
