@@ -6,13 +6,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="js/SessionAttributes.js"></script>
     <style type="text/css">
 
 
         body {
             background-color: lightpink;
-            background-image : url("background1.jpeg");
+            background-image : url("./images/background1.jpeg");
         }
 
         .create-room-content {
@@ -73,6 +72,7 @@
             position: relative;
             height: 70%;
             width: 50%;
+            left : 50%;
             background-color: #939ddb;
             opacity : 0.4;
             display: flex;
@@ -102,8 +102,29 @@
         }
 
         #create-button {
-            background-color: #d4aed3;
+            background-color: #939ddb;
             color: white;
+            height: 55px;
+            width: 300px;
+            font-size: 18pt;
+            font-weight: bold;
+        }
+
+        input[type=text] {
+            height : 55px;
+            width : 300px;
+            font-size : 18pt;
+            padding-left: 10px;
+        }
+
+        input::placeholder {
+            text-align : center;
+            color : lightgrey;
+            font-size : 18pt;
+        }
+
+        #room-code {
+            height : 65px;
         }
 
     </style>
@@ -115,26 +136,26 @@
         <div class="create-room-content">
             <div class="create-room-option">
                 <label class="option-label" for="num-players" style="">Number of Players</label>
-                <input type="text" id="num-players" class="create-room-input" />
+                <input type="text" id="num-players" class="create-room-input" placeholder="Number of Players"/>
             </div>
             <div class="create-room-option">
-                <label class="option-label" for="time-limit" style="">Time Limit</label>
-                <input type="text" id="time-limit" class="create-room-input" />
+                <label class="option-label" for="time-limit" style="">Time Limit (seconds?)</label>
+                <input type="text" id="time-limit" class="create-room-input" placeholder="Time Limit"/>
             </div>
             <div class="create-room-option">
                 <label class="option-label" for="num-rounds" style="">Number of Rounds</label>
-                <input type="text" id="num-rounds" class="create-room-input" />
+                <input type="text" id="num-rounds" class="create-room-input" placeholder="Number of Rounds"/>
             </div>
             <div class="create-room-option">
                 <input type="file" id="file-input" title="   " /> <br> <br>
                 <div class="image-preview" id="imagePreview">
                     <!--<span class="img-preview-text">Image Preview</span>-->
-                    <img src="" alt="Image Preview" class="img-preview-img">
+                    <img src="" alt="Image Preview" id="image-preview" class="img-preview-img">
                 </div>
             </div>
             <div class="create-room-option">
-                <label class="option-label" for="time-limit" style="">Room Code</label>
-                <input type="text" id="room-code" class="create-room-input" />
+                <label class="option-label" for="room-code" style="">Room Code</label>
+                <input type="text" id="room-code" class="create-room-input" placeholder="Room Code"/>
             </div>
             <div class="create-room-option">
                 <button class="btn" id="create-button" type="button" onclick="createRoom();">Create Room</button>
@@ -176,7 +197,11 @@
         }
 
         function createRoom() {
-            $.ajax({
+            console.log("Players: " + document.getElementById('num-players').value);
+            console.log("Time: " + document.getElementById('time-limit').value);
+            console.log("Rounds: " + document.getElementById('num-rounds').value);
+            console.log("Room Code: " + document.getElementById('room-code').value);
+            /*$.ajax({
                 url: "CreateRoomServlet",
                 method: "POST",
                 data: {
@@ -184,7 +209,7 @@
                     maxPlayers: document.getElementById('num-players').value,
                     timeLimit: document.getElementById('time-limit').value,
                     rounds: document.getElementById('num-rounds').value,
-                    images: imageList,
+                    images: imageList
                     room_code: document.getElementById('room-code').value
 
                 },
@@ -192,14 +217,37 @@
                     var resultObj = JSON.parse(result);
                     if (!resultObj.status) {
                         $(this).load("gamepage.html");
-                        ROOMCODE = document.getElementById('room-code').value;
                     }
                     else {
                         alert("Unsuccessful Room Creation");
                     }
                 }
-            });
+            });*/
         }
+
+        /*var image_preview_active = false;
+
+        function previewImageClick() {
+            img = document.getElementById('image-preview');
+            img.style.transform = 'scale(5.0)';
+            img.style.transition = 'transform 0.25s ease';
+            previewContainer.style.opacity = 1;
+            previewContainer.style.zIndex = 10;
+            image_preview_active = true;
+        }
+
+        $(document).click(function (event) {
+            console.log("outside image");
+            var target = $(event.target);
+            console.log(target.className);
+            if (!target.closest('image-preview') && image_preview_active) {
+                console.log("outside image");
+                img.style.transform = 'scale(1.0)';
+                previewContainer.style.opacity = '0.4';
+                previewContainer.style.zIndex = 'initial';
+                image_preview_active = false;
+            }
+        });*/
 
     </script>
 </body>
