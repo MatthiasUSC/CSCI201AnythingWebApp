@@ -32,13 +32,6 @@ public class Player {
         return round.getImage();
     }
     
-    /*byte judge() throws InterruptedException {
-        // If judge doesn't choose, all players will get score.
-        byte selection = r.judge;
-        //TODO get selection
-        return selection;
-    }*/
-    
     private static StringBuilder wrap(final String s) {return new StringBuilder("\"").append(s).append('"');}
     private static StringBuilder wrap(final String k,final CharSequence v) {return wrap(k).append(':').append(v);}
     @Override

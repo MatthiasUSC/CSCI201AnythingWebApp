@@ -1,41 +1,56 @@
 package servlet.game;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class JudgeImageServlet
- */
+import game.Room;
+import sessionAttributes.SessionAttributeKeys;
+
 @WebServlet("/JudgeImageServlet")
 public class JudgeImageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String WINNER_PARAM = "winner";
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public JudgeImageServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+    public JudgeImageServlet() {super();}
+    
+	@Override
+	protected void service(final HttpServletRequest request,
+	                       final HttpServletResponse response)
+	                       throws ServletException,IOException {
+	    try {
+	        ((Room)request.getSession().getAttribute(SessionAttributeKeys.Room.toString()))
+	        .setWinner(Byte.parseByte(request.getParameter(WINNER_PARAM)));
+	    } catch(final Exception e) {}
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
