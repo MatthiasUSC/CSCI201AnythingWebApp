@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 import util.container.BitSet;
 
-public class Room {
+public class Room extends Thread {
     private static final short MAX_CODE = 10000;
     private static short CODE = 0;
     private static final BitSet ALLOCATED = new BitSet(MAX_CODE);
@@ -18,12 +19,14 @@ public class Room {
     byte add = 0,ready = 0,round = 0,judge = 0,winner = -1;
     final BufferedImage[] images;
     final byte[] roundImages;
-    final Player[] players;
+    public BufferedImage[] finished = null;
+    public byte[] scramble = null,unscramble = null;
+    public final Player[] players;
     final short code;
     final byte rounds;
     final long timeLimit;
     Thread lobby;
-    State state = State.LOBBY;
+    GameState state = GameState.LOBBY;
     
     public static synchronized Room createRoom(final byte size,final long timeLimit,final byte rounds,
                                                final BufferedImage[] images) {
@@ -57,67 +60,72 @@ public class Room {
     public static synchronized Room getLobby(final short code) {return LOBBIES.get(code);}
     
     public synchronized Player addPlayer() throws InterruptedException {
-        if(state == State.LOBBY && add < players.length) {
-            players[add] = new Player(this,add);
-            if(add == 0) {
-                final Player host = players[add];
-                lobby = new Thread() {
-                    @Override
-                    public void run() {
-                        try {host.lobby();}
-                        catch(final InterruptedException e) {}
-                    }
-                };
-                lobby.start();
-            }
-            return players[add++];
-        }
-        return null;
+        return state == GameState.LOBBY && add < players.length? players[add] = new Player(this,add) : null;
     }
     
-    void run() throws InterruptedException {
+    public void run() {
         {
             final UUID id = UUID.randomUUID();
             REGISTRY.put(id,this);
         }
         LOBBIES.remove(code);
         ALLOCATED.clear(code);
-        synchronized(this) {
-            state = State.START;
-            notifyAll();
-        }
-        while(++round != rounds) {
-            onStart();
-            onJudge();
+        try {
+            while(++round != rounds) {
+                onStart();
+                onJudge();
+            }
+        } catch(final InterruptedException e) {
+            // TODO: handle exception
         }
         onEnd();
     }
     
     private void onStart() throws InterruptedException {
-        for(final Player p : players) if(p.id != judge) synchronized(p) {if(p.img != null) p.wait();}
-        state = State.JUDGE;
+        state = GameState.START;
+        
+        //TODO long poll stuff while time limit
+        TimeUnit.MILLISECONDS.sleep(timeLimit);
+        state = GameState.JUDGE;
+        
+        // wait for finish
+        finished = new BufferedImage[scramble.length];
+        for(final Player p : players) if(p.id != judge) finished[scramble[p.id]] = p.img;
     }
     
     private void onJudge() throws InterruptedException {
-        final byte[] scramble = new byte[players.length - 1];
+        scramble = new byte[players.length - 1];
         for(byte i = 0;i < judge;++i) scramble[i] = i;
         for(byte i = judge;i < players.length - 1;scramble[i] = ++i);
-        for(final Player p : players) if(p.id != judge) p.waitForJudge(scramble);
-        synchronized(this) {
-            winner = players[judge].judge(scramble);
-            notifyAll();
+        {
+            final ThreadLocalRandom r = ThreadLocalRandom.current();
+            for(byte i = (byte)(scramble.length - 1);i > 0;--i) {
+                final byte t;
+                {
+                    final byte j = (byte)(r.nextInt() % (i + 1));
+                    t = scramble[j];
+                    scramble[j] = scramble[i];
+                }
+                scramble[i] = t;
+            }
         }
+        for(byte i = 0;i < scramble.length;++i) unscramble[scramble[i]] = scramble[i] > judge? (byte)(i - 1) : i;
+        //TODO put winner = players[judge].judge(); somewhere to select the judge; probs somewhere in long poll
     }
     
+    public byte getWinner() {return winner;}
+    
     private void onEnd() {
-        state = State.END;
+        state = GameState.END;
     }
     
     public BufferedImage[] getImages() {
     	return images;
     }
     
-    public synchronized State getState() {return state;}
+    public synchronized GameState getGameState() {return state;}
+    
+    public BufferedImage getRoundImage() {return images[roundImages[round]];}
 }
 
 
