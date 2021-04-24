@@ -3,18 +3,25 @@ package game;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.util.StringJoiner;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import image.ImageHistory;
 import image.TextUtil.AlignmentX;
 import image.TextUtil.AlignmentY;
 
 public class Player {
-    private static final long JUDGE_TIMEOUT = 60L*1000L;
-    
     final Room r;
     final byte id;
+    final String name;
     public BufferedImage img = null;
-    Player(final Room r,final byte id) {this.r = r; this.id = id;}
+    final BlockingQueue<GameState> eventQ = new LinkedBlockingQueue<GameState>(); 
+    Player(final Room r,final byte id,final String name) {
+        this.r = r;
+        this.id = id;
+        this.name = name;
+    }
     
     ImageHistory round = null;
     
@@ -25,11 +32,20 @@ public class Player {
         return round.getImage();
     }
     
-    byte judge() throws InterruptedException {
+    /*byte judge() throws InterruptedException {
         // If judge doesn't choose, all players will get score.
         byte selection = r.judge;
         //TODO get selection
         return selection;
+    }*/
+    
+    private static StringBuilder wrap(final String s) {return new StringBuilder("\"").append(s).append('"');}
+    private static StringBuilder wrap(final String k,final CharSequence v) {return wrap(k).append(':').append(v);}
+    @Override
+    public String toString() {
+        return new StringJoiner(",","{","}").add(wrap("id",Integer.toString(id)))
+                                            .add(wrap("name",wrap(name)))
+                                            .toString();
     }
 }
 

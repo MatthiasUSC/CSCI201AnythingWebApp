@@ -3,13 +3,15 @@ package game;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import util.container.BitSet;
 
-public class Room extends Thread {
+public class Room {
+    private static final long JUDGE_TIMEOUT = 60L;
     private static final short MAX_CODE = 10000;
     private static short CODE = 0;
     private static final BitSet ALLOCATED = new BitSet(MAX_CODE);
@@ -26,7 +28,7 @@ public class Room extends Thread {
     final byte rounds;
     final long timeLimit;
     Thread lobby;
-    GameState state = GameState.LOBBY;
+    GameState state = GameState.JOIN;
     
     public static synchronized Room createRoom(final byte size,final long timeLimit,final byte rounds,
                                                final BufferedImage[] images) {
@@ -59,41 +61,37 @@ public class Room extends Thread {
     
     public static synchronized Room getLobby(final short code) {return LOBBIES.get(code);}
     
-    public synchronized Player addPlayer() throws InterruptedException {
-        return state == GameState.LOBBY && add < players.length? players[add] = new Player(this,add) : null;
+    public synchronized Player addPlayer(final String name) throws InterruptedException {
+        if(state == GameState.JOIN && add < players.length) {
+            final Player p = players[add] = new Player(this,add++,name);
+            broadcast(GameState.JOIN);
+            return p;
+        }
+        return null;
     }
     
-    public void run() {
+    private void broadcast(final GameState s) {
+        state = s;
+        for(byte p = 0;p < add;++p) players[p].eventQ.add(state);
+    }
+    
+    public void start() throws InterruptedException {
         {
             final UUID id = UUID.randomUUID();
             REGISTRY.put(id,this);
         }
         LOBBIES.remove(code);
         ALLOCATED.clear(code);
-        try {
-            while(++round != rounds) {
-                onStart();
-                onJudge();
-            }
-        } catch(final InterruptedException e) {
-            // TODO: handle exception
-        }
-        onEnd();
+        run();
     }
     
-    private void onStart() throws InterruptedException {
-        state = GameState.START;
+    private void run() throws InterruptedException {
+        broadcast(GameState.START);
         
         //TODO long poll stuff while time limit
         TimeUnit.MILLISECONDS.sleep(timeLimit);
-        state = GameState.JUDGE;
         
-        // wait for finish
-        finished = new BufferedImage[scramble.length];
-        for(final Player p : players) if(p.id != judge) finished[scramble[p.id]] = p.img;
-    }
-    
-    private void onJudge() throws InterruptedException {
+        // round over
         scramble = new byte[players.length - 1];
         for(byte i = 0;i < judge;++i) scramble[i] = i;
         for(byte i = judge;i < players.length - 1;scramble[i] = ++i);
@@ -110,13 +108,23 @@ public class Room extends Thread {
             }
         }
         for(byte i = 0;i < scramble.length;++i) unscramble[scramble[i]] = scramble[i] > judge? (byte)(i - 1) : i;
-        //TODO put winner = players[judge].judge(); somewhere to select the judge; probs somewhere in long poll
+        // get finished images
+        finished = new BufferedImage[scramble.length];
+        for(byte p = 0;p < add;++p) if(p != judge) finished[scramble[p]] = players[p].img;
+        broadcast(GameState.TIMEOUT);
     }
     
+    public void setWinner(final byte b) throws InterruptedException {
+        //TODO judge calls this method to select winner
+        winner = b;
+        broadcast(GameState.JUDGE);
+        if(++round == rounds) onEnd();
+        else run();
+    }
     public byte getWinner() {return winner;}
     
     private void onEnd() {
-        state = GameState.END;
+        broadcast(GameState.END);
     }
     
     public BufferedImage[] getImages() {
@@ -126,6 +134,16 @@ public class Room extends Thread {
     public synchronized GameState getGameState() {return state;}
     
     public BufferedImage getRoundImage() {return images[roundImages[round]];}
+    
+    private static StringBuilder wrap(final String s) {return new StringBuilder("\"").append(s).append('"');}
+    //private static StringBuilder wrap(final StringBuilder k,final String v) {return k.append(':').append(wrap(v));}
+    //private static StringBuilder wrap(final StringBuilder k,final int v) {return k.append(':').append(Integer.toString(v));}
+    
+    public String playerJSON() {
+        final StringJoiner o = new StringJoiner(",","\"players\":[","]");
+        for(byte p = 0;p < add;++p) o.add(wrap(players[p].name));
+        return o.toString();
+    }
 }
 
 
