@@ -95,13 +95,13 @@
     <div id="nav-container">
         <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="HomePage.html">Anything</a>
+                <a class="navbar-brand" href="homepage.html">Anything</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link active" aria-current="page" href="HomePage.html">Home</a>
+                        <a class="nav-link" aria-current="page" href="HomePage.html">Home</a>
                         <a class="nav-link" href="login.html">Log-in/Sign Up</a>
                         <p class="heading nav-link" style="text-align: right; color: honeydew;margin:0px"></p>
                     </div>
@@ -144,6 +144,34 @@
                 }
             })
         }
+    </script>
+    <script>
+	    $.ajax({
+	        method: "GET",
+	        url: "https://api.weatherbit.io/v2.0/current?city=Los+Angeles,CA&key=99483e4de410460bbfebc63787746477&units=I",
+	    })
+	    .done(function(data) {
+	        console.log(data);
+	        displayResults(data);
+	    })
+	    .fail(function(result){
+	        console.log(result.statusCode);
+	        console.log("ERROR!!!!");
+	    });
+	
+	    function displayResults(response){
+	        let cloud1="";
+	        if(response.data[0].clouds<50){
+	            cloud1="Clear Sky";
+	
+	        }
+	        else{
+	            cloud1="Cloudy sky"
+	        }
+	
+	        $(".heading").text("Today's weather in Los Angeles: "+response.data[0].temp+"° "+cloud1+". Feels like " + response.data[0].app_temp+"°");
+	        
+	    }
     </script>
 </body>
 
