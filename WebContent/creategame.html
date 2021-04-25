@@ -224,6 +224,16 @@
             console.log("Rounds: " + document.getElementById('num-rounds').value);
             console.log("Room Code: " + document.getElementById('room-code').value);
             console.log("Images: " + imageList);
+            
+            let imageStr = "";
+            for (let i = 0; i < imageList.length; i++) {
+            	let concatStr = imageList[i].replace(/^data:image\/(png|jpeg);base64,/, "");
+            	console.log("concat str" + concatStr);
+            	imageStr += concatStr + ",";
+           	}
+            
+            console.log("New Images: " + imageStr);
+            
             $.ajax({
                 url: "JoinRoomServlet",
                 method: "POST",
@@ -232,8 +242,7 @@
                     maxPlayers: document.getElementById('num-players').value,
                     timeLimit: document.getElementById('time-limit').value,
                     rounds: document.getElementById('num-rounds').value,
-                    images: imageList
-
+                    images: imageStr
                 },
                 success : function (result) {
                     var resultObj = JSON.parse(result);

@@ -46,7 +46,7 @@ public class Room {
             for(byte i = (byte)(rounds - 1);i > 0;--i) {
                 final byte t;
                 {
-                    final byte j = (byte)(r.nextInt() % (i + 1));
+                    final byte j = (byte)r.nextInt(i + 1);;
                     t = roundImages[j];
                     roundImages[j] = roundImages[i];
                 }
