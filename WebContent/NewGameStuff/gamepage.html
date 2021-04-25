@@ -283,17 +283,21 @@
         }; 
 
         function PreviewMemeServlet() {
-            $.ajax({
-
-            })
+        	$.ajax({
+        		type: 'POST',
+      		  	url: "PreviewMemeServlet",
+      		  	data: previewMemeJson,
+                success: function (result) {
+                	let resultObj = JSON.parse(result);
+                	let b64Image = resultObj.image;
+                	let dataURL = "data:image/png;base64," + b64Image;
+                	$("#loaded_image").attr("src", dataURL);
+                }
+            });
         }
 
         function setCurrentImageField(element_id) {
-            var element = document.getElementById(element_id);
-            current_image_field = element;
-            editor_panel_title.innerHTML = current_image_field.id;
-
-            switch (current_image_field.id) {
+            switch (element_id) {
                 case 'header':
                     FIELD = 'HEAD';
                     break;
@@ -309,96 +313,50 @@
                 case 'footer':
                     FIELD = 'FOOT';
                     break;
-                // If no selected field
                 default:
                     FIELD = 'none';
                     break;
             }
-
             previewMemeJson.alignmentY = FIELD;
-            console.log("Current image field: " + current_image_field.id);
+            PreviewMemeServlet();
         }
 
         function changeTextField() {
             var inner_text = document.getElementById('input-text').value;
-            console.log(inner_text);
-            if (current_image_field != null) {
-                current_image_field.innerHTML = inner_text;
-            }
             previewMemeJson.text = inner_text;
+            PreviewMemeServlet();
         }
-
-        // Font Size
-
+        
         function editChangeFontSize(sizeClass) {
-
             if (current_image_field != null) {
-                switch (sizeClass) {
-                    case 'sm':
-                        current_image_field.style.fontSize = '12pt';
-                        break;
-                    case 'md':
-                        current_image_field.style.fontSize = '18pt';
-                        break;
-                    case 'lg':
-                        current_image_field.style.fontSize = '36pt';
-                        break;
-                }
-
+                previewMemeJson.size = sizeClass;
+                PreviewMemeServlet();
             }
         }
 
         function editChangeXAlign(alignClass) {
             if (current_image_field != null) {
-                switch (alignClass) {
-                    case 'left':
-                        current_image_field.style.justifyContent = 'left';
-                        break;
-                    case 'right':
-                        current_image_field.style.justifyContent = 'flex-end';
-                        break;
-                    case 'center':
-                        current_image_field.style.justifyContent = 'center';
-                        break;
-                }
+                previewMemeJson.alignmentX = alignClass;
+                PreviewMemeServlet();
             }
         }
 
         function editChangeFontFamily(fontClass) {
             if (current_image_field != null) {
-                switch (fontClass) {
-                    case 'helvetica':
-                        current_image_field.style.fontFamily = 'Helvetica';
-                        break;
-                    case 'times':
-                        current_image_field.style.fontFamily = '"Times New Roman"';
-                        break;
-                    case 'papyrus':
-                        current_image_field.style.fontFamily = 'Papyrus';
-                        break;
-                }
+                 previewMemeJson.font = fontClass;
+                 PreviewMemeServlet();
             }
         }
 
         function editChangeFontStyle(styleClass) {
             if (current_image_field != null) {
-                switch (styleClass) {
-                    case 'plain':
-                        current_image_field.style.fontWeight = 'normal';
-                        current_image_field.style.fontStyle = 'normal';
-                        break;
-                    case 'bold':
-                        current_image_field.style.fontWeight = 'bold';
-                        break;
-                    case 'italic':
-                        current_image_field.style.fontWeight = 'normal';
-                        current_image_field.style.fontStyle = 'italic';
-                        break;
-                }
+                previewMemeJson.fontStyle = styleClass;
+                PreviewMemeServlet();
             }
         }
 
         function editChangeFontOutline(outlineClass) {
+        	//TODO make this change json
             if (current_image_field != null) {
                 switch (outlineClass) {
                     case 'none':
