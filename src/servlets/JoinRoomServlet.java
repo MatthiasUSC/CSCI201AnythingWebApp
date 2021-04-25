@@ -40,7 +40,7 @@ public class JoinRoomServlet extends HttpServlet {
     private enum CreateRoomArg {
         maxPlayers(r -> Byte.parseByte(r)),
         timeLimit(r -> 1000L * Long.parseLong(r)),
-        rounds(r -> Integer.parseInt(r)),
+        rounds(r -> Byte.parseByte(r)),
         images(r -> {
             final String[] b64 = r.split(",");
             final BufferedImage[] i = new BufferedImage[b64.length];
