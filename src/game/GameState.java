@@ -21,9 +21,9 @@ public enum GameState {
     TIMEOUT(r -> {
         final StringJoiner join = new StringJoiner("\",\"","\"","\"");
         for(final byte i : r.scramble) join.add(encode(r.finished[i]));
-        return new StringBuilder(",images:[").append(join.toString()).append(']');
+        return new StringBuilder(",\"images\":[").append(join.toString()).append(']');
     }),
-    JUDGE(r -> ',' + Integer.toString(r.getWinner())),
+    JUDGE(r -> "\"winner\":" + Integer.toString(r.getWinner())),
     END(r -> "");
     
     private static final Encoder B64 = Base64.getEncoder();
