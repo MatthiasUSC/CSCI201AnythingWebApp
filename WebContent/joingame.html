@@ -133,15 +133,15 @@
                     room_code: document.getElementById('join-room-code').value
                 },
                   success: function (result) {
-                  // if invalid roomcode 
-                  if (!result) {
-                      alert("Not A Valid Room Code");
-                  }
-                  else {
-                      ROOMCODE = document.getElementById('join-room-code').value;
-                      $(this).load("gamepage.html");
-                  }
-              }
+                  	  // if invalid roomcode 
+	                  if (!result) {
+	                      alert("Not A Valid Room Code");
+	                  }
+	                  else {
+	                      ROOMCODE = document.getElementById('join-room-code').value;
+	                      $(this).load("gamepage.html");
+	                  }
+              	}
             });
         }
     </script>

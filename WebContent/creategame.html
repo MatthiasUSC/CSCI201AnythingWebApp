@@ -195,16 +195,20 @@
 
             if (file) {
                 const reader = new FileReader();
+                var imageURL;
 
                 //previewImageText.style.display = "none";
                 previewImage.style.display = "block";
 
                 reader.addEventListener("load", function () {
                     previewImage.setAttribute("src", this.result);
+                    console.log(this.result);
+                    addImage(this.result);
+                    
                 });
 
-                reader.readAsDataURL(file);
-                addImage(file);
+                reader.readAsDataURL(file); 
+                /* addImage(file); */
             }
         });
 
@@ -219,6 +223,7 @@
             console.log("Time: " + document.getElementById('time-limit').value);
             console.log("Rounds: " + document.getElementById('num-rounds').value);
             console.log("Room Code: " + document.getElementById('room-code').value);
+            console.log("Images: " + imageList);
             $.ajax({
                 url: "JoinRoomServlet",
                 method: "POST",

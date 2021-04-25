@@ -22,7 +22,7 @@
     </style>
 
 </head>
-<body>
+<body style='background-image: url("./images/background1.jpeg");'>
     
     <div id="window-container" style="height : 1000px; width : 1000px; margin : 0 auto;">
         <div id="game-window">
@@ -30,17 +30,63 @@
         </div>
 
         <iframe id="image-edit-window" src="./Game-Windows/imageEditing.html" style="display:none; height: 100%; width:100%;"></iframe>
+        <iframe id="game-start-window" src="#" style="display:none; height: 100%; width:100%;"></iframe>
 
         
 
     </div>
-
+	
+	<script src="js/LongPollFunctions.js"></script>
     <script type="text/javascript">
         const imageEditWindow = document.getElementById('image-edit-window');
         const button = document.getElementById('game-window');
         function toggleEditing() {
             button.style.display = 'none';
             imageEditWindow.style.display = 'initial';
+        }
+        
+        //Long Poll
+        
+        const event = {
+        		LOBBY: "JOIN",
+        		START: "START",
+        		JUDGE: "JUDGE",
+        		TIMEOUT: "TIMEOUT",
+        		END: "END"
+        }
+        
+        function callLongPoll() {
+        	$.ajax({
+        		url : "LongPollServlet",
+        		success: function (result) {
+        			var respObj = JSON.parse(result);
+        			var eventType = respObj.event;
+        			switch (eventType) {
+        				case event.LOBBY:
+        					displayLobby(respObj);
+        					break;
+        				case event.START:
+        					displayStart();
+        					break;
+        				case event.JUDGE:
+        					displayJudge();
+        					break;
+        				case event.TIMEOUT:
+        					displayTimeout();
+        					break;
+        				case event.END:
+        					endGame();
+        					break;
+        				default:
+        					break;
+        				
+        			}
+        		}
+        	});
+        }
+        
+        while (true) {
+        	callLongPolll();
         }
     </script>
 </body>
