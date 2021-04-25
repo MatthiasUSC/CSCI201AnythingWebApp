@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="imageEditing.css" />
+    <link rel="stylesheet" href="gameLobby.css" />
+    <link rel="stylesheet" href="endGame.css" />
+    <title>Game Page</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-image: url("background1.jpeg");
+        }
+        .window-container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!--LOBBY CONTAINER-->
+    <div class="window-container" id="lobby" style="display: none;">
+        <div id="lobby-container">
+            <div class="player-card" id="">
+                <h3 class="player-status">Host</h3>
+                <h1 class="player-card-name">Yo Mamma</h1>
+            </div>
+        </div>
+    </div>
+
+    <!--EDITING CONTAINER-->
+    <div class="window-container" id="image-editing" style="display: none;">
+        <div class="image-workspace">
+            <div class="image-container">
+                <img class="image" id="loaded_image" src="../blacks_parking.jpg" />
+                <div class="image-fields">
+                    <div id="header" onclick="setCurrentImageField('header');">Header</div>
+                    <div id="top" onclick="setCurrentImageField('top');">Top</div>
+                    <div id="middle" onclick="setCurrentImageField('middle');">Middle</div>
+                    <div id="bottom" onclick="setCurrentImageField('bottom');">Bottom</div>
+                    <div id="footer" onclick="setCurrentImageField('footer');">Footer</div>
+                </div>
+
+            </div>
+            <div class="side-panel">
+                <h1 id="panel-title">Editor <span id="panel-title-field"></span></h1>
+                <div class="editor-option">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            X-Align <div class="caret"></div>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('left');">Left</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('right');">Right</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('center');">Center</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="editor-option">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Size <div class="caret"></div>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize('sm');">Small</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize('md');">Medium</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize('lg');">Large</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="editor-option">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Outline Size <div class="caret"></div>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('none');">None</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('thin');">Light</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('regular');">Regular</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('thick');">Thick</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('fat');">Thiccccc</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="editor-option">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Font <div class="caret"></div>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontFamily('helvetica');">Helvetica</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontFamily('times');">Times New Roman</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontFamily('papyrus');">Papyrus</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="editor-option">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Style <div class="caret"></div>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontStyle('plain');">Plain</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontStyle('bold');">Bold</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontStyle('italic');">Italic</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="editor-option editor-text">
+                    <label for="input-text" style="font-size : 16pt; margin-right : 8px;">Text</label>
+                    <input type="text" id="input-text" onblur="changeTextField();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--JUDGING CONTAINER (PLAYER)-->
+    <!--JUDGING CONTAINER (JUDGE)-->
+    <!--END OF GAME CONTAINER-->
+    <div class="window-container" id="end-of-game" >
+        <div class="end-of-game-container">
+            <h1>Game Over</h1>
+            <button class="btn" id="end-game-return-button" onclick="returnHome();">Return Home</button>
+        </div>
+    </div>
+
+    <button onclick="changeState('lobby', 'image-editing');">Change</button>
+    <script>
+        function changeState(previous, next) {
+            document.getElementById(previous).style.display = 'none';
+            document.getElementById(next).style.display = 'initial';
+        }
+
+        function returnHome() {
+            window.location.href = "../homepageregistered";
+        }
+
+    </script>
+
+    <script type="text/javascript">//Long Poll
+
+        let gameEnd = false;
+
+        // ALL POSSIBLE GAME WINDOWS 
+        const windows = {
+            LOBBYWINDOW: document.getElementById("lobby"),
+            EDITWINDOW: document.getElementById("image-editing"),
+            ENDWINDOW: document.getElementById("end-of-game")
+        };
+
+        /*
+        const lobbyWindow = document.getElementById("lobby");
+        const editingWindow = document.getElementById("image-editing");
+        const endGameWindow = document.getElementById("end-of-game");
+        */
+
+        const event = {
+            LOBBY: "JOIN",
+            START: "START",
+            JUDGE: "JUDGE",
+            TIMEOUT: "TIMEOUT",
+            END: "END"
+        }
+
+        function callLongPoll() {
+
+            // HIDE ALL DISPLAYS
+            for (view in windows) {
+                view.style.display = 'none';
+            }
+
+            $.ajax({
+                url: "LongPollServlet",
+                success: function (result) {
+                    var respObj = JSON.parse(result);
+                    var eventType = respObj.event;
+                    switch (eventType) {
+                        case event.LOBBY:
+                            windows.LOBBYWINDOW.style.display = 'initial';
+                            displayLobby(respObj);
+                            break;
+                        case event.START:
+                            windows.EDITWINDOW.style.display = 'initial';
+                            displayStart(respObj);
+                            break;
+                        case event.JUDGE:
+                            displayJudge();
+                            break;
+                        case event.TIMEOUT:
+                            displayTimeout();
+                            break;
+                        case event.END:
+                            windows.ENDWINDOW.style.display = 'initial';
+                            endGame();
+                            gameEnd = true;
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
+            });
+        }
+
+        function whateverYouWantToNameIt() {
+            /*while (!gameEnd) {
+                //callLongPoll();
+            }*/
+        }
+        
+    </script>
+
+    <!--Servlet Functions-->
+    <script>
+        
+        // LOBBY 
+        function displayLobby(respObj_) {
+            var playerObjList = respObj_.players;
+            const lobbyContainer = document.getElementById("lobby-container");
+
+            for (player in playerObjList) {
+                // Make new player card
+                var playercard = document.createElement("div");
+                playercard.setAttribute("class", "player-card");
+                var playerCardName = document.createElement("h1").setAttribute("class", "player-card-name");
+                var playerCardStatus = document.createElement("h3").setAttribute("class", "player-status");
+                playerCardName.innerHTML = player.name; // player username
+                var playerStatus = "player"; // host or player
+                if (player.id == 0) { // player is host
+                    playerStatus = "host";
+                }
+                playerCardStatus.innerHTML = playerStatus;
+
+                playercard.appendChild(playerCardStatus);
+                playercard.appendChild(playerCardName);
+
+            }
+        }
+
+        //EDITING WINDOW 
+        function displayStart(respObj_) {
+            var currImg = respObj_.image; // extract current image
+            const imageContainer = document.getElementById("loaded_image");
+            imageContainer.setAttribute("src", currImg);
+        }
+
+        // END GAME
+        function endGame() {
+            console.log("GAME ENDED!");
+        }
+
+    </script>
+
+    <script type="text/javascript">
+        let current_image_field;
+        const editor_panel_title = document.getElementById('panel-title-field');
+        let FIELD = 'none';
+
+        // send to PreviewMemeServlet
+        // Defaults:
+        let previewMemeJson = {
+            alignmentY: 'TOP',
+            alignmentX: 'CENTER',
+            size: 12,
+            outlineSize: 1.0,
+            fillColor: 'BLACK',
+            outlineColor: 'BLACK',
+            headerBGColor: 'WHITE',
+            footerBGColor: 'WHITE',
+            font: 'Helvetica Neue',
+            fontStyle: 'plain',
+            text: ''
+
+        }; 
+
+        function PreviewMemeServlet() {
+            $.ajax({
+
+            })
+        }
+
+        function setCurrentImageField(element_id) {
+            var element = document.getElementById(element_id);
+            current_image_field = element;
+            editor_panel_title.innerHTML = current_image_field.id;
+
+            switch (current_image_field.id) {
+                case 'header':
+                    FIELD = 'HEAD';
+                    break;
+                case 'top':
+                    FIELD = 'TOP';
+                    break;
+                case 'middle':
+                    FIELD = 'MID';
+                    break;
+                case 'bottom':
+                    FIELD = 'LOW';
+                    break;
+                case 'footer':
+                    FIELD = 'FOOT';
+                    break;
+                // If no selected field
+                default:
+                    FIELD = 'none';
+                    break;
+            }
+
+            previewMemeJson.alignmentY = FIELD;
+            console.log("Current image field: " + current_image_field.id);
+        }
+
+        function changeTextField() {
+            var inner_text = document.getElementById('input-text').value;
+            console.log(inner_text);
+            if (current_image_field != null) {
+                current_image_field.innerHTML = inner_text;
+            }
+            previewMemeJson.text = inner_text;
+        }
+
+        // Font Size
+
+        function editChangeFontSize(sizeClass) {
+
+            if (current_image_field != null) {
+                switch (sizeClass) {
+                    case 'sm':
+                        current_image_field.style.fontSize = '12pt';
+                        break;
+                    case 'md':
+                        current_image_field.style.fontSize = '18pt';
+                        break;
+                    case 'lg':
+                        current_image_field.style.fontSize = '36pt';
+                        break;
+                }
+
+            }
+        }
+
+        function editChangeXAlign(alignClass) {
+            if (current_image_field != null) {
+                switch (alignClass) {
+                    case 'left':
+                        current_image_field.style.justifyContent = 'left';
+                        break;
+                    case 'right':
+                        current_image_field.style.justifyContent = 'flex-end';
+                        break;
+                    case 'center':
+                        current_image_field.style.justifyContent = 'center';
+                        break;
+                }
+            }
+        }
+
+        function editChangeFontFamily(fontClass) {
+            if (current_image_field != null) {
+                switch (fontClass) {
+                    case 'helvetica':
+                        current_image_field.style.fontFamily = 'Helvetica';
+                        break;
+                    case 'times':
+                        current_image_field.style.fontFamily = '"Times New Roman"';
+                        break;
+                    case 'papyrus':
+                        current_image_field.style.fontFamily = 'Papyrus';
+                        break;
+                }
+            }
+        }
+
+        function editChangeFontStyle(styleClass) {
+            if (current_image_field != null) {
+                switch (styleClass) {
+                    case 'plain':
+                        current_image_field.style.fontWeight = 'normal';
+                        current_image_field.style.fontStyle = 'normal';
+                        break;
+                    case 'bold':
+                        current_image_field.style.fontWeight = 'bold';
+                        break;
+                    case 'italic':
+                        current_image_field.style.fontWeight = 'normal';
+                        current_image_field.style.fontStyle = 'italic';
+                        break;
+                }
+            }
+        }
+
+        function editChangeFontOutline(outlineClass) {
+            if (current_image_field != null) {
+                switch (outlineClass) {
+                    case 'none':
+                        current_image_field.style.webkitTextStrokeWidth = '0pt';
+                        break;
+                    case 'thin':
+                        current_image_field.style.webkitTextStrokeWidth = '0.5pt';
+                        break;
+                    case 'regular':
+                        current_image_field.style.webkitTextStrokeWidth = '1pt';
+                        break;
+                    case 'thick':
+                        current_image_field.style.webkitTextStrokeWidth = '2pt';
+                        break;
+                    case 'fat':
+                        current_image_field.style.webkitTextStrokeWidth = '3pt';
+                        break;
+                }
+            }
+        }
+    </script>
+
+</body>
+
+<script type="text/javascript">
+    whateverYouWantToNameIt();
+</script>
+
+</html>
