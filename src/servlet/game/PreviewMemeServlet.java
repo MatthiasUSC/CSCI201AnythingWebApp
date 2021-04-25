@@ -51,12 +51,12 @@ public class PreviewMemeServlet extends HttpServlet {
         try {
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write(pushState(request,(Player)request.getSession().getAttribute(SessionAttributeKeys.Player.toString())),"PNG",out);
-            response.getWriter().append("{\"status\":0,\"base64Img\":\"")
+            response.getWriter().append("{\"status\":0,\"image\":\"")
                                 .append(B64.encodeToString(out.toByteArray()))
                                 .append("\"}");
             return;
         } catch(final Exception e) {e.printStackTrace();}
-        response.getWriter().append("{\"status\":1,\"base64Img\":null}");
+        response.getWriter().append("{\"status\":1,\"image\":null}");
     }
     private static BufferedImage pushState(final HttpServletRequest r,final Player p) {
         return p.updateImage(
