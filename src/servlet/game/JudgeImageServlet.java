@@ -15,8 +15,6 @@ import sessionAttributes.SessionAttributeKeys;
 public class JudgeImageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String WINNER_PARAM = "winner";
-       
-    public JudgeImageServlet() {super();}
     
 	@Override
 	protected void service(final HttpServletRequest request,
@@ -28,29 +26,3 @@ public class JudgeImageServlet extends HttpServlet {
 	    } catch(final Exception e) {}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

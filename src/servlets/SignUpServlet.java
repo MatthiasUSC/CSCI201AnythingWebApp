@@ -1,7 +1,7 @@
-// package com.jcg.mongodb.servlet;
 package servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,38 +9,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import util.Util;
-
-import static servlets.REGISTRY.*;
+import util.MongoDBUtil;
 
 @WebServlet("/SignUpServlet")
 public class SignUpServlet extends HttpServlet {
-    private static final String TARGET = "/whatever the html is"; //TODO
-    
     private static final long serialVersionUID = 1L;
+    private static final String ERR_NAME = "Please enter username and password.";
+    private static final String ERR_DUPE = "An account with these credentials already exist.";
+    private static final String SUCCESS = "Success!";
     
-    public void doPost(HttpServletRequest req,HttpServletResponse response) throws IOException,ServletException {
-        //TODO do we need this extra function call?
-        handleRequest(req,response);
-    }
-    
-    public void handleRequest(final HttpServletRequest req,
-                              final HttpServletResponse resp)
-                              throws IOException,ServletException {
-        // Reading post parameters from the request
-        String param1 = req.getParameter(RequestCode.ID.s),
-               param2 = param1 == null || param1.isEmpty()? null : req.getParameter(RequestCode.PWD.s),
-               param3 = param2 == null || param2.isEmpty()? null : req.getParameter(RequestCode.EMAIL.s);
-        // Checking for null and empty values
-        if(param3 == null || param3.isBlank()) {
-            req.setAttribute(ERR_ATTR,ERR_NAME);
-            req.getRequestDispatcher(TARGET).forward(req,resp);
-        } else if(Util.createUser(param1,param2,param3)) {
-            resp.getWriter().print(SUCCESS);
-            // req.getRequestDispatcher(TARGET).forward(req, resp);
-        } else {
-            resp.getWriter().print(ERR_DUPE);
-            req.setAttribute(ERR_ATTR,ERR_DUPE);
-        }
+    @Override
+    public void doPost(final HttpServletRequest request,
+                       final HttpServletResponse response)
+                       throws IOException,ServletException {
+        final String param1 = request.getParameter(RequestCode.ID.s),
+                     param2 = param1 == null || param1.isEmpty()? null : request.getParameter(RequestCode.PWD.s),
+                     param3 = param2 == null || param2.isEmpty()? null : request.getParameter(RequestCode.EMAIL.s);
+        final PrintWriter pw = response.getWriter();
+        if(param3 == null || param3.isBlank()) pw.print(ERR_NAME);
+        else if(!MongoDBUtil.createUser(param1,param2,param3)) pw.print(ERR_DUPE);
+        else pw.print(SUCCESS);
     }
 }

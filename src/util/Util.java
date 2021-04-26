@@ -1,79 +1,30 @@
-//package com.jcg.mongodb.servlet;
 package util;
  
+import static resources.Registry.MONGO;
+
+import org.bson.Document;
+
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
  
+@Deprecated
 public class Util {
- 
-    // Method to search a user in the mongodb
-    @SuppressWarnings("deprecation")
+    private static final String DB = "Anything",COLLECTION = "LoginInfo";
+    
 	public static boolean findUser(String username, String email) {
-    	MongoClientURI uri = new MongoClientURI(
-    		    "mongodb+srv://mikelism:mikelism@cluster0.0gnzp.mongodb.net/Anything?retryWrites=true&w=majority");
-    	
-    	MongoClient mongo = new MongoClient(uri);
-        String db_name = "Anything",
-                collection = "LoginInfo";
- 
-        DB db = mongo.getDB(db_name);
- 
-        DBCollection col = db.getCollection(collection);
-
-        BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put("name", username);
-
-        DBCursor cursor = col.find(searchQuery);
-
-        while (cursor.hasNext()) {
-        	mongo.close();
-            return true;
-        }
-        
-        searchQuery = new BasicDBObject();
-        searchQuery.put("email", email);
-        
-        cursor = col.find(searchQuery);
-
-        while (cursor.hasNext()) {
-        	mongo.close();
-            return true;
-        }
-        
-        mongo.close();
-        return false;
+        final MongoCollection<Document> col = MONGO.getDatabase(DB).getCollection(COLLECTION);
+        return col.find(new BasicDBObject("name",username)).iterator().hasNext() ||
+               col.find(new BasicDBObject("email",email)).iterator().hasNext();
     }
     
-    @SuppressWarnings("deprecation")
 	public static boolean createUser(String username, String password, String email) {
-    	MongoClientURI uri = new MongoClientURI(
-    		    "mongodb+srv://mikelism:mikelism@cluster0.0gnzp.mongodb.net/Anything?retryWrites=true&w=majority");
-    	
-    	MongoClient mongo = new MongoClient(uri);
-        String db_name = "Anything",
-                collection = "LoginInfo";
- 
-        DB db = mongo.getDB(db_name);
- 
-        DBCollection col = db.getCollection(collection);
-
-        if(findUser(username, password)) {
-        	mongo.close();
-        	return false;
-        }
-
-        BasicDBObject document = new BasicDBObject();
-        document.put("name", username);
-        document.put("password", password);
-        document.put("email", email);
+        final MongoCollection<Document> col = MONGO.getDatabase(DB).getCollection(COLLECTION);
+        if(col.find(new BasicDBObject("name",username)).iterator().hasNext() ||
+           col.find(new BasicDBObject("email",email)).iterator().hasNext()) return false;
         
-        col.insert(document);
-        
-        mongo.close();
+        col.insertOne(new Document("name",username)
+                           .append("password",password)
+                           .append("email",email));
         return true;
     }
 }
