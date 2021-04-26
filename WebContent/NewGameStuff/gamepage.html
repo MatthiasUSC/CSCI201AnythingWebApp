@@ -124,7 +124,17 @@
     </div>
 
     <!--JUDGING CONTAINER (PLAYER)-->
+    <div id = "playerContainer" style = "width:80%;margin-left:auto;margin-right:auto;justify-content: center;text-align:center;">
+        <h3>The Winner : </h3>
+        <h1 id="winnerID"></h1>
+    </div>
+    
+
     <!--JUDGING CONTAINER (JUDGE)-->
+    <div id="judgeContainer">
+        <!--dynamically fill the div -->
+    </div>
+
     <!--END OF GAME CONTAINER-->
     <div class="window-container" id="end-of-game" style="display: none;">
         <div class="end-of-game-container">
@@ -233,6 +243,34 @@
                     }
                 }
             });
+        }
+
+        function displayImages(respObj){
+            let imgList = respObj_.players;
+            for(image in imgList){
+                let elementContainer = $('<div></div>');
+                elementContainer.addClass("d-flex flex-wrap");
+                elementContainer.css("width","25%");
+                elementContainer.css("position","relative");
+                let imageElement = $('<img>');
+                imageElement.css("width","100%");
+                let winnerButton = $('<button></button>');
+                winnerButton.css("margin-top","10px");
+                winnerButton.click(function(){
+                    //how to get user id here ; 
+
+                });
+
+                imageElement.attr("src","image");
+                elementContainer.append(imageElement);
+                elementContainer.append(winnerButton);
+                $("#judgeContainer").append(elementContainer);
+            }
+        }
+
+        function displayWinneer(respObj){
+            let winner = respObj.winner;
+            $("#winnerID").html("The winner is #" + winner);
         }
 
         function whateverYouWantToNameIt() {
