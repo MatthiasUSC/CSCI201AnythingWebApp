@@ -30,6 +30,8 @@ public class Player {
         return round.getImage();
     }
     
+    public boolean isJudge() {return r.getJudge() == id;}
+    
     private static StringBuilder wrap(final String s) {return new StringBuilder("\"").append(s).append('"');}
     private static StringBuilder wrap(final String k,final CharSequence v) {return wrap(k).append(':').append(v);}
     @Override
