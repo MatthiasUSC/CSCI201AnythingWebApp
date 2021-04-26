@@ -116,6 +116,7 @@ public class Room {
         winner = unscramble[b];
         broadcast(GameState.JUDGE);
         if(++round == rounds) {
+            ++judge;
             broadcast(GameState.END);
             //REGISTRY.remove(uuid);
         } else {
@@ -123,6 +124,7 @@ public class Room {
             run();
         }
     }
+    byte getJudge() {return judge;}
     public BufferedImage getRoundImage() {return images[roundImages[round]];}
     
     public String playerJSON() {
