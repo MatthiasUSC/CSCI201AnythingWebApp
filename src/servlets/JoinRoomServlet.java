@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import game.Player;
 import game.Room;
 import sessionAttributes.SessionAttributeKeys;
 
@@ -23,7 +22,7 @@ public class JoinRoomServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String OP_PARAM = "join_op";
     private static enum Operation {create,join}
-    private static final String ROOM_CODE_PARAMETER = "room_code"; // subject to change
+    private static final String ROOM_CODE_PARAMETER = "room_code";
     private static final String NAME_PARAM = "username";
     
     private static enum Err {
@@ -39,8 +38,8 @@ public class JoinRoomServlet extends HttpServlet {
     private static interface getter<T> {T get(final String r);}
     private enum CreateRoomArg {
         maxPlayers(r -> Byte.parseByte(r)),
-        timeLimit(r -> 1000L * Long.parseLong(r)),
-        rounds(r -> Byte.parseByte(r)),
+        timeLimit(r -> Short.parseShort(r)),
+        rounds(r -> Integer.parseInt(r)),
         images(r -> {
             final String[] b64 = r.split(",");
             final BufferedImage[] i = new BufferedImage[b64.length];
@@ -71,42 +70,12 @@ public class JoinRoomServlet extends HttpServlet {
                 case join -> Room.getLobby(Byte.parseByte(request.getParameter(ROOM_CODE_PARAMETER)));
             };
             if(room == null) {Err.couldNotJoin.respond(response); return;}
-            final Player player = room.addPlayer(request.getParameter(NAME_PARAM));
-            // link room and player to session
             final HttpSession session = request.getSession();
+            session.setAttribute(SessionAttributeKeys.Player.toString(),room.addPlayer(request.getParameter(NAME_PARAM)));
             session.setAttribute(SessionAttributeKeys.Room.toString(),room);
-            session.setAttribute(SessionAttributeKeys.Player.toString(),player);
-            //TODO send info to clients
-        } catch(InterruptedException|NumberFormatException|NullPointerException e) {
-            e.printStackTrace();
-            Err.couldNotCreate.respond(response);
         } catch(final Exception e) {
             e.printStackTrace();
             Err.couldNotCreate.respond(response);
         }
     }
-    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

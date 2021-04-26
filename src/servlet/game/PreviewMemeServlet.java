@@ -45,6 +45,7 @@ public class PreviewMemeServlet extends HttpServlet {
         private <T> T get(final HttpServletRequest r) {return (T)g.get(r.getParameter(toString()));}
     }
     
+    @Override
     protected void doPost(final HttpServletRequest request,
                           final HttpServletResponse response)
                           throws ServletException,IOException {

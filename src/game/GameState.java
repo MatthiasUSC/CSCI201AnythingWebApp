@@ -14,16 +14,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import sessionAttributes.SessionAttributeKeys;
 
-interface Action {CharSequence action(final Room i) throws IOException;}
+interface Action {CharSequence action(final Room r) throws IOException;}
 public enum GameState {
-    JOIN(r -> ',' + r.playerJSON()),
+    JOIN(r -> new StringBuilder(",\"code\":").append(r.code).append(',').append(r.playerJSON())),
     START(r -> new StringBuilder(",\"image\":\"").append(encode(r.getRoundImage())).append('"')),
     TIMEOUT(r -> {
         final StringJoiner join = new StringJoiner("\",\"","\"","\"");
         for(final byte i : r.scramble) join.add(encode(r.finished[i]));
         return new StringBuilder(",\"images\":[").append(join.toString()).append(']');
     }),
-    JUDGE(r -> "\"winner\":" + Integer.toString(r.getWinner())),
+    JUDGE(r -> "\"winner\":" + Integer.toString(r.winner)),
     END(r -> "");
     
     private static final Encoder B64 = Base64.getEncoder();
@@ -44,29 +44,3 @@ public enum GameState {
                      .append('}');
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
