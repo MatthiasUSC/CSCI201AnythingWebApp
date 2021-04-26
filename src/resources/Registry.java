@@ -12,6 +12,9 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientOptions;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
@@ -59,6 +62,6 @@ public final class Registry {
         String s = "";
         try(final BufferedReader i = new BufferedReader(new FileReader(getResource("mongo.txt").toFile()))) {s = i.readLine();}
         catch(final IOException e) {e.printStackTrace(); System.out.println("Could not get the MongoDB info."); System.exit(1);}
-        MONGO = MongoClients.create(s);
+        MONGO  = MongoClients.create(s);
     }
 }

@@ -244,14 +244,19 @@
                     rounds: document.getElementById('num-rounds').value,
                     images: imageStr
                 },
-                success : function (result) {
+                success : function (data) {
+                	window.location.href = "http://stackoverflow.com";
+                	
+                	//$(document).load("gamepage.html"); somehow throws an error
+                	/* TODO add status response to JoinRoomServlet
                     var resultObj = JSON.parse(result);
                     if (!resultObj.status) {
-                        $(this).load("gamepage.html");
+                        
                     }
                     else {
                         alert("Unsuccessful Room Creation");
                     }
+                    */
                 }
             });
         }
