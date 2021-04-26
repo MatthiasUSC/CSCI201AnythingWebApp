@@ -130,6 +130,7 @@
                 method: 'POST',
                 data: {
                     join_op: 'join',
+                    username: localStorage.getItem("username"),
                     room_code: document.getElementById('join-room-code').value
                 },
                   success: function (result) {

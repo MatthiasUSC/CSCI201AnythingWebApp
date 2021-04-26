@@ -39,7 +39,8 @@
 										data: $('#signinform').serialize(),
 										success: function(yn){
 											if(yn !== "Invalid credentials. Please try again."){
-												alert(yn);				
+												localStorage.setItem("username", document.getElementById('user').value);
+												window.location.href = "registeredhomepage.html";			
 											}
 											else{
 												alert(yn);
@@ -84,7 +85,6 @@
 										success: function(yn){
 											if(yn !== "An account with these credentials already exist."){
 												alert(yn);		
-												$(document).load("registeredhomepage.html");
 											}
 											else{
 												alert(yn);

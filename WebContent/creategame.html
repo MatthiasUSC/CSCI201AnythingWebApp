@@ -242,6 +242,7 @@
                     maxPlayers: document.getElementById('num-players').value,
                     timeLimit: document.getElementById('time-limit').value,
                     rounds: document.getElementById('num-rounds').value,
+                    username: localStorage.getItem("username"),
                     images: imageStr
                 },
                 success : function (result) {
