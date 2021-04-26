@@ -8,7 +8,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
  
-public class Util {
+public class MongoDBUtil {
  
     // Method to search a user in the mongodb
 	public static boolean findUser(String username, String password) {
