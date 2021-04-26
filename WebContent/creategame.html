@@ -244,10 +244,10 @@
                     rounds: document.getElementById('num-rounds').value,
                     images: imageStr
                 },
-                success : function (data) {
-                	window.location.href = "http://stackoverflow.com";
+                success : function (result) {
+                	alert("Create room success");
+                	window.location.href = "NewGameStuff/gamepage.html";
                 	
-                	//$(document).load("gamepage.html"); somehow throws an error
                 	/* TODO add status response to JoinRoomServlet
                     var resultObj = JSON.parse(result);
                     if (!resultObj.status) {

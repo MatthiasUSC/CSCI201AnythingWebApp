@@ -5,25 +5,72 @@ import static resources.Registry.MONGO;
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
- 
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+
 public class MongoDBUtil {
-    private static final String DB = "Anything",COLLECTION = "LoginInfo";
-    
-    public static boolean findUser(String username, String email) {
-        final MongoCollection<Document> col = MONGO.getDatabase(DB).getCollection(COLLECTION);
-        return col.find(new BasicDBObject("name",username)).iterator().hasNext() ||
-               col.find(new BasicDBObject("email",email)).iterator().hasNext();
-    }
-    
-    public static boolean createUser(String username, String password, String email) {
-        final MongoCollection<Document> col = MONGO.getDatabase(DB).getCollection(COLLECTION);
-        if(col.find(new BasicDBObject("name",username)).iterator().hasNext() ||
-           col.find(new BasicDBObject("email",email)).iterator().hasNext()) return false;
-        
-        col.insertOne(new Document("name",username)
-                           .append("password",password)
-                           .append("email",email));
-        return true;
-    }
+	// Method to search a user in the mongodb
+	public static boolean findUser(String username, String password) {
+		MongoClientURI uri = new MongoClientURI(
+				"mongodb+srv://mikelism:mikelism@cluster0.0gnzp.mongodb.net/Anything?retryWrites=true&w=majority");
+
+		MongoClient mongo = new MongoClient(uri);
+		String db_name = "Anything", collection = "LoginInfo";
+
+		MongoDatabase db = mongo.getDatabase(db_name);
+
+		FindIterable<Document> col = db.getCollection(collection).find();
+		MongoCursor<Document> iterator = col.iterator();
+		int foundCount = 0;// if its 2, credentials matched
+		while (iterator.hasNext()) {
+			foundCount = 0;
+			Document doc = iterator.next();
+			String name = doc.getString("name");
+			System.out.println(name);
+			if (name.equals(username)) {
+				foundCount++;
+			}
+			String pwd = doc.getString("password");
+			System.out.println(pwd);
+			if (pwd.equals(password)) {
+				foundCount++;
+			}
+			if (foundCount == 2) {
+				mongo.close();
+				return true;
+			}
+		}
+
+		mongo.close();
+		return false;
+	}
+
+	public static boolean createUser(String username, String password, String email) {
+		MongoClientURI uri = new MongoClientURI(
+				"mongodb+srv://mikelism:mikelism@cluster0.0gnzp.mongodb.net/Anything?retryWrites=true&w=majority");
+
+		MongoClient mongo = new MongoClient(uri);
+		String db_name = "Anything", collection = "LoginInfo";
+
+		MongoDatabase db = mongo.getDatabase(db_name);
+
+		if (findUser(username, password)) {
+			mongo.close();
+			return false;
+		}
+
+		Document doc = new Document();
+		doc.put("name", username);
+		doc.put("password", password);
+		doc.put("email", email);
+
+		db.getCollection(collection).insertOne(doc);
+
+		mongo.close();
+		return true;
+	}
 }

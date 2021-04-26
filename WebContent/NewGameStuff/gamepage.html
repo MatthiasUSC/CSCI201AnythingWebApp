@@ -126,7 +126,7 @@
     <!--JUDGING CONTAINER (PLAYER)-->
     <!--JUDGING CONTAINER (JUDGE)-->
     <!--END OF GAME CONTAINER-->
-    <div class="window-container" id="end-of-game" >
+    <div class="window-container" id="end-of-game" style="display: none;">
         <div class="end-of-game-container">
             <h1>Game Over</h1>
             <button class="btn" id="end-game-return-button" onclick="returnHome();">Return Home</button>
@@ -151,17 +151,15 @@
         let gameEnd = false;
 
         // ALL POSSIBLE GAME WINDOWS 
-        const windows = {
-            LOBBYWINDOW: document.getElementById("lobby"),
-            EDITWINDOW: document.getElementById("image-editing"),
-            ENDWINDOW: document.getElementById("end-of-game")
-        };
+        
 
         /*
         const lobbyWindow = document.getElementById("lobby");
         const editingWindow = document.getElementById("image-editing");
         const endGameWindow = document.getElementById("end-of-game");
         */
+        
+        
 
         const event = {
             LOBBY: "JOIN",
@@ -169,27 +167,50 @@
             JUDGE: "JUDGE",
             TIMEOUT: "TIMEOUT",
             END: "END"
-        }
+        };
 
         function callLongPoll() {
-
-            // HIDE ALL DISPLAYS
-            for (view in windows) {
-                view.style.display = 'none';
-            }
-
+        	
+        	const windows = {
+                    LOBBYWINDOW: document.getElementById("lobby"),
+                    EDITWINDOW: document.getElementById("image-editing"),
+                    ENDWINDOW: document.getElementById("end-of-game")
+             };
+        	
+            console.log("Waiting for long poll...");
+            
             $.ajax({
-                url: "LongPollServlet",
+                url: "../LongPollServlet",
+                method: "GET",
+                data: null,
                 success: function (result) {
+                	
+                	let windowArray = [
+                        document.getElementById("lobby"),
+                        document.getElementById("image-editing"),
+                        document.getElementById("end-of-game")
+	                 ];
+	            	
+	                // HIDE ALL DISPLAYS
+	                for (let i = 0; i < windowArray.length; i++) {
+	                	let view = windowArray[i];
+	                    view.style.display = 'none';
+	                }
+                	
+                	
                     var respObj = JSON.parse(result);
                     var eventType = respObj.event;
+                    
+                    console.log("Recieved event: " + eventType);
+                    console.log("Recieved event object: " + result);
+                    
                     switch (eventType) {
                         case event.LOBBY:
-                            windows.LOBBYWINDOW.style.display = 'initial';
+                            windows.LOBBYWINDOW.style.display = 'block';
                             displayLobby(respObj);
                             break;
                         case event.START:
-                            windows.EDITWINDOW.style.display = 'initial';
+                            windows.EDITWINDOW.style.display = 'block';
                             displayStart(respObj);
                             break;
                         case event.JUDGE:
@@ -199,22 +220,23 @@
                             displayTimeout();
                             break;
                         case event.END:
-                            windows.ENDWINDOW.style.display = 'initial';
+                            windows.ENDWINDOW.style.display = 'block';
                             endGame();
                             gameEnd = true;
                             break;
                         default:
                             break;
-
+                    }
+                    
+                    if (!gameEnd) {
+                        callLongPoll();
                     }
                 }
             });
         }
 
         function whateverYouWantToNameIt() {
-            /*while (!gameEnd) {
-                //callLongPoll();
-            }*/
+        	callLongPoll();
         }
         
     </script>
@@ -224,15 +246,22 @@
         
         // LOBBY 
         function displayLobby(respObj_) {
+        	
             var playerObjList = respObj_.players;
+            console.log("Player List: " + playerObjList);
             const lobbyContainer = document.getElementById("lobby-container");
 
             for (player in playerObjList) {
                 // Make new player card
                 var playercard = document.createElement("div");
                 playercard.setAttribute("class", "player-card");
-                var playerCardName = document.createElement("h1").setAttribute("class", "player-card-name");
-                var playerCardStatus = document.createElement("h3").setAttribute("class", "player-status");
+                
+                var playerCardName = document.createElement("h1");
+                playerCardName.setAttribute("class", "player-card-name");
+                
+                var playerCardStatus = document.createElement("h3");
+                playerCardStatus.setAttribute("class", "player-status");
+                
                 playerCardName.innerHTML = player.name; // player username
                 var playerStatus = "player"; // host or player
                 if (player.id == 0) { // player is host
@@ -378,9 +407,7 @@
             }
         }
     </script>
-
 </body>
-
 <script type="text/javascript">
     whateverYouWantToNameIt();
 </script>
