@@ -10,8 +10,32 @@ import java.util.concurrent.TimeUnit;
 
 import util.container.BitSet;
 
+
+
+
+class StarterThread extends Thread {
+	private Room room;
+	private int seconds;
+	
+	public StarterThread(Room room, int seconds) {
+		this.room = room;
+		this.seconds = seconds;
+	}
+	
+	@Override
+	public void run() {
+		try {
+			Thread.sleep(seconds * 1000);
+			room.start();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
 public class Room {
     //private static final long JUDGE_TIMEOUT = 60L;
+	private static final short LOBBY_BUFFER = 5;
     private static final short ROUND_BUFFER = 5;
     private static final short MAX_CODE = 10000;
     private static short CODE = 0;
@@ -75,6 +99,11 @@ public class Room {
     private void broadcast(final GameState s) {
         state = s;
         for(byte p = 0;p < add;++p) players[p].eventQ.add(state);
+    }
+    
+    public void triggerStartCountdown() {
+    	StarterThread st = new StarterThread(this, LOBBY_BUFFER);
+    	st.start();
     }
     
     public void start() throws InterruptedException {

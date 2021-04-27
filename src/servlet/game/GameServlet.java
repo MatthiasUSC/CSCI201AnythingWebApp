@@ -15,8 +15,7 @@ public class GameServlet extends HttpServlet {
     private static enum Operations {
         //submit_image(SubmitImageServlet.class),
         judge_image(JudgeImageServlet.class),
-        preview_meme(PreviewMemeServlet.class),
-        leave_room(LeaveRoomServlet.class);
+        preview_meme(PreviewMemeServlet.class);
         
         private String dispatcher;
         private Operations(final Class<?> dispatcher) {this.dispatcher = dispatcher.getSimpleName();}

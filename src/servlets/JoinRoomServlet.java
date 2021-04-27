@@ -1,6 +1,7 @@
 package servlets;
 
 import java.awt.image.BufferedImage;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Base64;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpSession;
 
 import game.Room;
 import sessionAttributes.SessionAttributeKeys;
+
+
 
 @WebServlet("/JoinRoomServlet")
 public class JoinRoomServlet extends HttpServlet {
@@ -60,14 +63,19 @@ public class JoinRoomServlet extends HttpServlet {
                           final HttpServletResponse response)
                           throws ServletException,IOException {
         try {
-            final Room room = switch(Operation.valueOf(request.getParameter(OP_PARAM))) {
-                case create -> Room.createRoom(
+            Room room = null;
+    		switch(Operation.valueOf(request.getParameter(OP_PARAM))) {
+                case create:
+                	room = Room.createRoom(
                     CreateRoomArg.maxPlayers.get(request),
                     CreateRoomArg.timeLimit.get(request),
                     CreateRoomArg.rounds.get(request),
-                    CreateRoomArg.images.get(request)
-                );
-                case join -> Room.getLobby(Byte.parseByte(request.getParameter(ROOM_CODE_PARAMETER)));
+                    CreateRoomArg.images.get(request));
+                    room.triggerStartCountdown();
+                    break;
+                case join:
+                	room = Room.getLobby(Byte.parseByte(request.getParameter(ROOM_CODE_PARAMETER)));
+                	break;
             };
             if(room == null) {Err.couldNotJoin.respond(response); return;}
             final HttpSession session = request.getSession();
