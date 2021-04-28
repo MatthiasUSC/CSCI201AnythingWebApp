@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <!--EDITING CONTAINER-->
+    <!--EDITING CONTAINER (PLAYER) -->
     <div class="window-container" id="image-editing" style="display: none;">
         <div class="image-workspace">
             <div class="image-container">
@@ -124,6 +124,11 @@
             </div>
         </div>
     </div>
+    
+     <!--EDITING CONTAINER (JUDGE) -->
+    <div class="window-container" id="image-editing-judge" style="display: none;">
+    	<h1>You are the Judge this round.</h1>
+    </div>
 
     <!--TIMEOUT CONTAINER (PLAYER)-->
     <div class="window-container" id="timeout-player" style="display: none;">
@@ -152,6 +157,7 @@
             <button class="btn" id="choose-winner-button" onclick="sendWinner();">Choose Winner</button>
         </div>
     </div>
+    
     <!--JUDGE'S PICK CONTAINER-->
     <div class="window-container" id="show-winner" style="display:none;">
         <div id="playerContainer" style="width:80%;margin-left:auto;margin-right:auto;justify-content: center;text-align:center;">
@@ -168,31 +174,17 @@
         </div>
     </div>
 
-    <button onclick="changeState('lobby', 'image-editing');">Change</button>
-    <script>function changeState(previous, next) {
-            document.getElementById(previous).style.display = 'none';
-            document.getElementById(next).style.display = 'initial';
-        }
-
-        function returnHome() {
-            window.location.href = "../homepageregistered";
-        }
-    </script>
-
     <script type="text/javascript">//Long Poll
 
         let gameEnd = false;
 
         // ALL POSSIBLE GAME WINDOWS
         
-
         /*
         const lobbyWindow = document.getElementById("lobby");
         const editingWindow = document.getElementById("image-editing");
         const endGameWindow = document.getElementById("end-of-game");
         */
-
-
 
         const event = {
             LOBBY: "JOIN",
@@ -207,6 +199,7 @@
             const windows = {
                 LOBBYWINDOW: document.getElementById("lobby"),
                 EDITWINDOW: document.getElementById("image-editing"),
+                EDITWINDOW_JUDGE: document.getElementById("image-editing-judge"),
                 ENDWINDOW: document.getElementById("end-of-game"),
                 JUDGEWINDOW: document.getElementById("show-winner"),
                 TIMEOUTWINDOW_PLAYER: document.getElementById("timeout-player"),
@@ -224,6 +217,7 @@
                     let windowArray = [
                         document.getElementById("lobby"),
                         document.getElementById("image-editing"),
+                        document.getElementById("image-editing-judge"),
                         document.getElementById("timeout-player"),
                         document.getElementById("timeout-judge"),
                         document.getElementById("show-winner"),
@@ -249,8 +243,13 @@
                             displayLobby(respObj);
                             break;
                         case event.START:
-                            windows.EDITWINDOW.style.display = 'block';
-                            displayStart(respObj);
+                        	var isJudge = respObj.judge;
+                        	if(isJudge){
+                        		windows.EDITWINDOW_JUDGE.style.display = 'block';
+                        	} else {
+                        		windows.EDITWINDOW.style.display = 'block';
+                                displayStart(respObj);
+                        	}
                             break;
                         case event.JUDGE:
                             windows.JUDGEWINDOW.style.display = 'block';
@@ -304,7 +303,6 @@
     <script>
 
         // LOBBY
-
         function displayLobby(respObj_) {
 
             var playerObjList = respObj_.players;
@@ -335,8 +333,7 @@
             }
         }
 
-        //EDITING WINDOW
-
+        //EDITING 
         function displayStart(respObj_) {
             var currImg = "data:image/png;base64," + respObj_.image;   // extract current image
             const imageContainer = document.getElementById("loaded_image");
@@ -395,7 +392,6 @@
         }
 
         //JUDGING WINDOW (PLAYER)
-
         function displayPlayerTimeout(respObj_) {
             
             var images = respObj_.images;
@@ -546,6 +542,8 @@
             }
         }</script>
 </body>
-<script type="text/javascript">whateverYouWantToNameIt();</script>
+<script type="text/javascript">
+whateverYouWantToNameIt();
+</script>
 
 </html>

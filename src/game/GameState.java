@@ -22,7 +22,7 @@ public enum GameState {
     TIMEOUT((r,p) -> {
         final StringJoiner join = new StringJoiner("\",\"","\"","\"");
         for(final byte i : r.scramble) join.add(encode(r.finished[i]));
-        return new StringBuilder(",\"images\":[").append(join.toString()).append(']');
+        return new StringBuilder(",\"images\":[").append(join.toString()).append(']').append(",\"judge\":").append(p.id == r.getJudge());
     }),
     JUDGE((r,p) -> new StringBuilder(",\"winner\":\"").append(encode(r.winner)).append('"')),
     END((r,p) -> "");
