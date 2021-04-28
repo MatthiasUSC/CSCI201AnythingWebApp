@@ -66,7 +66,7 @@ public class Room {
         code = ALLOCATED.setNextFalse(CODE);
         if(++CODE == MAX_CODE) CODE = 0;
         roundImages = new byte[rounds];
-        for(byte i = 0;i < rounds;++i) roundImages[i] = i % images.length;
+        for(byte i = 0;i < rounds;++i) roundImages[i] = (byte)(i % images.length);
         {
             final ThreadLocalRandom r = ThreadLocalRandom.current();
             for(byte i = (byte)(rounds - 1);i > 0;--i) {
