@@ -21,7 +21,7 @@ public class Player {
         this.name = name;
     }
     
-    private ImageHistory round = null;
+    ImageHistory round = null;
     
     public BufferedImage updateImage(final AlignmentY y,final AlignmentX x,final int size,final double outlineSize,
                                      final Color fill,final Color outline,final Color bgH,final Color bgF,final Font f,
