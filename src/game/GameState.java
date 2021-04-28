@@ -42,5 +42,10 @@ public enum GameState {
                      .append("\"")
                      .append(action.action((Room)i.getSession().getAttribute(SessionAttributeKeys.Room.toString())))
                      .append('}');
+        if(this == END) {
+            final HttpSession s = i.getSession();
+            s.removeAttribute(SessionAttributeKeys.Room.toString());
+            s.removeAttribute(SessionAttributeKeys.Player.toString());
+        }
     }
 }
