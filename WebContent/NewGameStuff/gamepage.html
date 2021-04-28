@@ -30,6 +30,7 @@
 
     <!--LOBBY CONTAINER-->
     <div class="window-container" id="lobby" style="display: none;">
+    	<h3 id="roomcode-display"></h3>
         <div id="lobby-container">
             <!--<div class="player-card" id="">
                 <h3 class="player-status">Host</h3>
@@ -304,6 +305,8 @@
 
         // LOBBY
         function displayLobby(respObj_) {
+        	
+        	document.getElementById("roomcode-display").innerHTML = "Room code: " + respObj_.code;
 
             var playerObjList = respObj_.players;
             console.log("Player List: " + playerObjList);
@@ -355,7 +358,7 @@
                 
                 let currImg = "data:image/png;base64," + image;
                 judgeImg.setAttribute("src", currImg);
-                judgeImg.settAttribut('data-imgId', i);
+                judgeImg.setAttribute('data-imgId', i);
                 
                 timeoutJudgeContainer.appendChild(judgeImg);
                 i++;
