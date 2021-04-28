@@ -149,6 +149,7 @@
                 <img class="judge-img" src="background1.jpeg" />
 
             </div>
+            <button class="btn" id="choose-winner-button" onclick="sendWinner();">Choose Winner</button>
         </div>
     </div>
     <!--JUDGE'S PICK CONTAINER-->
@@ -350,18 +351,24 @@
             // PURGE INSIDE FROM PREVIOUS ROUNDS 
             cleanInside(timeoutJudgeContainer);
             // FILL WITH NEW CONTENTS
+            var i = 0;
             for (image in images) {
                 var judgeImg = document.createElement("img");
                 judgeImg.setAttribute("class", "judge-img");
+                
                 let currImg = "data:image/png;base64," + image;
                 judgeImg.setAttribute("src", currImg);
+                judgeImg.settAttribut('data-imgId', i);
+                
                 timeoutJudgeContainer.appendChild(judgeImg);
+                i++;
             }
 
         }
 
         // JUDGING WINDOW (JUDGE)--> WINNER SELECTION  
         let imageSelected = false;
+       	var selectedImgId;
         $('.judge-img').click(function () {
             console.log("Image clicked");
             if ($(this)[0].hasAttribute("id")) {
@@ -372,8 +379,20 @@
             else if (!imageSelected) {
                 imageSelected = true;
                 $(this).attr('id', 'judge-img-selected'); // removes the previous selected class 
+                selectedImgId = $(this).data('data-imgId');
             }
         });
+        
+        function sendWinner() {
+        	$.ajax({
+        		url : "JudgeImageServlet",
+        		data : {
+        			winner : selectedImgId
+        		}
+        		
+        		
+        	});
+        }
 
         //JUDGING WINDOW (PLAYER)
 

@@ -43,3 +43,15 @@ html, body {
     margin-bottom: 50px;
     margin-top: 5px;
 }
+
+#judge-img-selected {
+    border: 10px solid lightpink;
+}
+
+#choose-winner-button {
+    position : absolute;
+    bottom : 20px;
+    height : 40px;
+    background-color: seagreen;
+    color : white;
+}
