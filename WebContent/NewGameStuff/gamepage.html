@@ -337,9 +337,8 @@
         //EDITING WINDOW
 
         function displayStart(respObj_) {
-            var currImg = respObj_.image;   // extract current image
+            var currImg = "data:image/png;base64," + respObj_.image;   // extract current image
             const imageContainer = document.getElementById("loaded_image");
-            currImg += "data:image/png;base64,";
             imageContainer.setAttribute("src", currImg);
         }
 
@@ -354,8 +353,8 @@
             for (image in images) {
                 var judgeImg = document.createElement("img");
                 judgeImg.setAttribute("class", "judge-img");
-                image += "data:image/png;base64,";
-                judgeImg.setAttribute("src", image);
+                let currImg = "data:image/png;base64," + image;
+                judgeImg.setAttribute("src", currImg);
                 timeoutJudgeContainer.appendChild(judgeImg);
             }
 
@@ -388,8 +387,8 @@
             for (image in images) {
                 var playerImg = document.createElement("img");
                 playerImg.setAttribute("class", "timeout-img");
-                image += "data:image/png;base64,";
-                playerImg.setAttribute("src", image);
+                let currImg = "data:image/png;base64," + image;
+                playerImg.setAttribute("src", currImg);
                 timeoutJudgeContainer.appendChild(playerImg);
             }
         }
@@ -400,12 +399,9 @@
             // PURGE INSIDE FROM PREVIOUS ROUNDS
             cleanInside(winnerContainer);
             // FILL WITH NEW CONTENTS 
-            var winningImg = respObj_.image;
-            winningImg += "data:image/png;base64,";
+            var winningImg = "data:image/png;base64," + respObj_.image;
             var addImg = document.createElement("img");
             addImg.setAttribut('src', winningImg);
-            
-
         }
 
         // END GAME 

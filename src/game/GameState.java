@@ -18,7 +18,7 @@ import sessionAttributes.SessionAttributeKeys;
 interface Action {CharSequence action(final Room r,final Player p) throws IOException;}
 public enum GameState {
     JOIN((r,p) -> new StringBuilder(",\"code\":").append(r.code).append(',').append(r.playerJSON())),
-    START((r,p) -> new StringBuilder(",\"judge\":").append(p.id == r.judge).append(",\"image\":\"").append(encode(r.getRoundImage())).append('"')),
+    START((r,p) -> new StringBuilder(",\"judge\":").append(p.id == r.getJudge()).append(",\"image\":\"").append(encode(r.getRoundImage())).append('"')),
     TIMEOUT((r,p) -> {
         final StringJoiner join = new StringJoiner("\",\"","\"","\"");
         for(final byte i : r.scramble) join.add(encode(r.finished[i]));
