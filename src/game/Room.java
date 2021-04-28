@@ -42,7 +42,7 @@ public class Room {
         code = ALLOCATED.setNextFalse(CODE);
         if(++CODE == MAX_CODE) CODE = 0;
         roundImages = new byte[rounds];
-        for(byte i = 0;i < rounds;++i) roundImages[i] = i;
+        for(byte i = 0;i < rounds;++i) roundImages[i] = i % images.length;
         {
             final ThreadLocalRandom r = ThreadLocalRandom.current();
             for(byte i = (byte)(rounds - 1);i > 0;--i) {
@@ -90,9 +90,10 @@ public class Room {
         TimeUnit.SECONDS.sleep(timeLimit);
         
         // round over
-        scramble = new byte[players.length - 1];
+        scramble = new byte[add - 1];
+        unscramble = new byte[add];
         for(byte i = 0;i < judge;++i) scramble[i] = i;
-        for(byte i = judge;i < players.length - 1;scramble[i] = ++i);
+        for(byte i = judge;i < add - 1;scramble[i] = ++i);
         {
             final ThreadLocalRandom r = ThreadLocalRandom.current();
             for(byte i = (byte)(scramble.length - 1);i > 0;--i) {
