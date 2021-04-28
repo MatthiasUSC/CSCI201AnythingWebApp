@@ -45,7 +45,7 @@ public class Room {
     
     final UUID uuid = UUID.randomUUID();
     private byte add = 0,round = 0,judge = 0;
-    public byte winner = -1;
+    public BufferedImage winner = null;
     private final BufferedImage[] images;
     private final byte[] roundImages;
     public BufferedImage[] finished = null;
@@ -143,7 +143,7 @@ public class Room {
     }
     
     public void setWinner(final byte b) throws InterruptedException {
-        winner = unscramble[b];
+        winner = finished[unscramble[b] - (b > judge? 1 : 0)];
         broadcast(GameState.JUDGE);
         if(++round == rounds) {
             ++judge;
