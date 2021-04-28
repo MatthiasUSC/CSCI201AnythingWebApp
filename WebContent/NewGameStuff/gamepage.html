@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="imageEditing.css" />
     <link rel="stylesheet" href="gameLobby.css" />
     <link rel="stylesheet" href="endGame.css" />
+    <link rel="stylesheet" href="gameTimeout.css" />
     <title>Game Page</title>
     <style>
         html, body {
@@ -18,6 +19,7 @@
         body {
             background-image: url("background1.jpeg");
         }
+
         .window-container {
             width: 100%;
             height: 100%;
@@ -29,10 +31,10 @@
     <!--LOBBY CONTAINER-->
     <div class="window-container" id="lobby" style="display: none;">
         <div id="lobby-container">
-            <div class="player-card" id="">
+            <!--<div class="player-card" id="">
                 <h3 class="player-status">Host</h3>
                 <h1 class="player-card-name">Yo Mamma</h1>
-            </div>
+            </div>-->
         </div>
     </div>
 
@@ -123,16 +125,38 @@
         </div>
     </div>
 
-    <!--JUDGING CONTAINER (PLAYER)-->
-    <div id = "playerContainer" style = "width:80%;margin-left:auto;margin-right:auto;justify-content: center;text-align:center;">
-        <h3>The Winner : </h3>
-        <h1 id="winnerID"></h1>
-    </div>
-    
+    <!--TIMEOUT CONTAINER (PLAYER)-->
+    <div class="window-container" id="timeout-player" style="display: none;">
+        <div id="judge-container">
+            <div id="timeout-content-window">
+                <h1 id="judge-content-title">Waiting for judge...</h1>
+                <img class="timeout-img" src="background1.jpeg" />
 
-    <!--JUDGING CONTAINER (JUDGE)-->
-    <div id="judgeContainer">
-        <!--dynamically fill the div -->
+            </div>
+        </div>
+    </div>
+
+    <!--TIMEOUT CONTAINER (JUDGE)-->
+    <div class="window-container" id="timeout-judge" style="display:none;">
+        <div id="judge-container">
+            <div id="judge-content-window">
+                <h1 id="judge-content-title">Pick a Winner</h1>
+                <img class="judge-img" src="background1.jpeg" />
+                <img class="judge-img" src="background1.jpeg" />
+                <img class="judge-img" src="background1.jpeg" />
+                <img class="judge-img" src="background1.jpeg" />
+                <img class="judge-img" src="background1.jpeg" />
+                <img class="judge-img" src="background1.jpeg" />
+
+            </div>
+        </div>
+    </div>
+    <!--JUDGE'S PICK CONTAINER-->
+    <div class="window-container" id="show-winner" style="display:none;">
+        <div id="playerContainer" style="width:80%;margin-left:auto;margin-right:auto;justify-content: center;text-align:center;">
+            <h3>The Winner : </h3>
+            <h1 id="winnerID"></h1>
+        </div>
     </div>
 
     <!--END OF GAME CONTAINER-->
@@ -144,8 +168,7 @@
     </div>
 
     <button onclick="changeState('lobby', 'image-editing');">Change</button>
-    <script>
-        function changeState(previous, next) {
+    <script>function changeState(previous, next) {
             document.getElementById(previous).style.display = 'none';
             document.getElementById(next).style.display = 'initial';
         }
@@ -153,14 +176,13 @@
         function returnHome() {
             window.location.href = "../homepageregistered";
         }
-
     </script>
 
     <script type="text/javascript">//Long Poll
 
         let gameEnd = false;
 
-        // ALL POSSIBLE GAME WINDOWS 
+        // ALL POSSIBLE GAME WINDOWS
         
 
         /*
@@ -168,8 +190,8 @@
         const editingWindow = document.getElementById("image-editing");
         const endGameWindow = document.getElementById("end-of-game");
         */
-        
-        
+
+
 
         const event = {
             LOBBY: "JOIN",
@@ -180,40 +202,46 @@
         };
 
         function callLongPoll() {
-        	
-        	const windows = {
-                    LOBBYWINDOW: document.getElementById("lobby"),
-                    EDITWINDOW: document.getElementById("image-editing"),
-                    ENDWINDOW: document.getElementById("end-of-game")
-             };
-        	
+
+            const windows = {
+                LOBBYWINDOW: document.getElementById("lobby"),
+                EDITWINDOW: document.getElementById("image-editing"),
+                ENDWINDOW: document.getElementById("end-of-game"),
+                JUDGEWINDOW: document.getElementById("show-winner"),
+                TIMEOUTWINDOW_PLAYER: document.getElementById("timeout-player"),
+                TIMEOUTWINDOW_JUDGE: document.getElementById("timeout-judge")
+            };
+
             console.log("Waiting for long poll...");
-            
+
             $.ajax({
                 url: "../LongPollServlet",
                 method: "GET",
                 data: null,
                 success: function (result) {
-                	
-                	let windowArray = [
+
+                    let windowArray = [
                         document.getElementById("lobby"),
                         document.getElementById("image-editing"),
+                        document.getElementById("timeout-player"),
+                        document.getElementById("timeout-judge"),
+                        document.getElementById("show-winner"),
                         document.getElementById("end-of-game")
-	                 ];
-	            	
-	                // HIDE ALL DISPLAYS
-	                for (let i = 0; i < windowArray.length; i++) {
-	                	let view = windowArray[i];
-	                    view.style.display = 'none';
-	                }
-                	
-                	
+                    ];
+
+                    // HIDE ALL DISPLAYS
+                    for (let i = 0; i < windowArray.length; i++) {
+                        let view = windowArray[i];
+                        view.style.display = 'none';
+                    }
+
+
                     var respObj = JSON.parse(result);
                     var eventType = respObj.event;
-                    
+
                     console.log("Recieved event: " + eventType);
                     console.log("Recieved event object: " + result);
-                    
+
                     switch (eventType) {
                         case event.LOBBY:
                             windows.LOBBYWINDOW.style.display = 'block';
@@ -224,10 +252,19 @@
                             displayStart(respObj);
                             break;
                         case event.JUDGE:
-                            displayJudge();
+                            windows.JUDGEWINDOW.style.display = 'block';
+                            displayImage(respObj);
                             break;
                         case event.TIMEOUT:
-                            displayTimeout();
+                            var isJudge = respObj.judge; // Bool returned from long poll
+                            if (isJudge) {
+                                windows.TIMEOUTWINDOW_JUDGE.style.display = 'block';
+                                displayJudgeTimeout(respObj);
+                            }
+                            else {
+                                windows.TIMEOUTWINDOW_PLAYER.style.display = 'block';
+                                displayPlayerTimeout(respObj);
+                            }
                             break;
                         case event.END:
                             windows.ENDWINDOW.style.display = 'block';
@@ -237,7 +274,7 @@
                         default:
                             break;
                     }
-                    
+
                     if (!gameEnd) {
                         callLongPoll();
                     }
@@ -245,95 +282,138 @@
             });
         }
 
-        function displayImages(respObj){
-            let imgList = respObj_.players;
-            for(image in imgList){
-                let elementContainer = $('<div></div>');
-                elementContainer.addClass("d-flex flex-wrap");
-                elementContainer.css("width","25%");
-                elementContainer.css("position","relative");
-                let imageElement = $('<img>');
-                imageElement.css("width","100%");
-                let winnerButton = $('<button></button>');
-                winnerButton.css("margin-top","10px");
-                winnerButton.click(function(){
-                    //how to get user id here ; 
-
-                });
-
-                imageElement.attr("src","image");
-                elementContainer.append(imageElement);
-                elementContainer.append(winnerButton);
-                $("#judgeContainer").append(elementContainer);
-            }
-        }
-
-        function displayWinneer(respObj){
-            let winner = respObj.winner;
-            $("#winnerID").html("The winner is #" + winner);
-        }
+        
+            
 
         function whateverYouWantToNameIt() {
-        	callLongPoll();
+            callLongPoll();
         }
-        
+        </script>
+
+    <script>
+        // PURGING ALL CONTENTS FROM PREVIOUS ROUND
+        function cleanInside(parent) {
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+        }
     </script>
 
     <!--Servlet Functions-->
     <script>
-        
-        // LOBBY 
+
+        // LOBBY
+
         function displayLobby(respObj_) {
-        	
+
             var playerObjList = respObj_.players;
             console.log("Player List: " + playerObjList);
             const lobbyContainer = document.getElementById("lobby-container");
 
             for (player in playerObjList) {
-                // Make new player card
+                // Make new player card 
                 var playercard = document.createElement("div");
                 playercard.setAttribute("class", "player-card");
-                
+
                 var playerCardName = document.createElement("h1");
                 playerCardName.setAttribute("class", "player-card-name");
-                
+
                 var playerCardStatus = document.createElement("h3");
                 playerCardStatus.setAttribute("class", "player-status");
-                
-                playerCardName.innerHTML = player.name; // player username
+
+                playerCardName.innerHTML = player.name;  // player username
                 var playerStatus = "player"; // host or player
-                if (player.id == 0) { // player is host
+                if (player.id == 0) {  // player is host
                     playerStatus = "host";
                 }
                 playerCardStatus.innerHTML = playerStatus;
 
                 playercard.appendChild(playerCardStatus);
                 playercard.appendChild(playerCardName);
-
+                lobbyContainer.appendChild(playercard);
             }
         }
 
-        //EDITING WINDOW 
+        //EDITING WINDOW
+
         function displayStart(respObj_) {
-            var currImg = respObj_.image; // extract current image
+            var currImg = respObj_.image;   // extract current image
             const imageContainer = document.getElementById("loaded_image");
             imageContainer.setAttribute("src", currImg);
         }
 
-        // END GAME
+        // JUDGING WINDOW (JUDGE)--> DISPLAY WINDOW
+
+        function displayJudgeTimeout(respObj_) {
+            var images = respObj_.images;
+            const timeoutJudgeContainer = document.getElementById("judge-content-window");
+            // PURGE INSIDE FROM PREVIOUS ROUNDS 
+            cleanInside(timeoutJudgeContainer);
+            // FILL WITH NEW CONTENTS
+            for (image in images) {
+                var judgeImg = document.createElement("img");
+                judgeImg.setAttribute("class", "judge-img");
+                judgeImg.setAttribute("src", image);
+                timeoutJudgeContainer.appendChild(judgeImg);
+            }
+
+        }
+
+        // JUDGING WINDOW (JUDGE)--> WINNER SELECTION  
+        let imageSelected = false;
+        $('.judge-img').click(function () {
+            console.log("Image clicked");
+            if ($(this)[0].hasAttribute("id")) {
+                $(this).removeAttr('id');
+                imageSelected = false;
+            }
+
+            else if (!imageSelected) {
+                imageSelected = true;
+                $(this).attr('id', 'judge-img-selected'); // removes the previous selected class 
+            }
+        });
+
+        //JUDGING WINDOW (PLAYER)
+
+        function displayPlayerTimeout(respObj_) {
+            
+            var images = respObj_.images;
+            const timeoutJudgeContainer = document.getElementById("timeout-content-window");
+            // PURGE INSIDE FROM PREVIOUS ROUNDS 
+            cleanInside(timeoutJudgeContainer);
+            // FILL WITH NEW CONTENTS 
+            for (image in images) {
+                var playerImg = document.createElement("img");
+                playerImg.setAttribute("class", "timeout-img");
+                playerImg.setAttribute("src", image);
+                timeoutJudgeContainer.appendChild(playerImg);
+            }
+        }
+
+        // SHOW WINNER
+        function displayImages(respObj_) {
+            const winnerContainer = document.getElementById("playerContainer");
+            // PURGE INSIDE FROM PREVIOUS ROUNDS
+            cleanInside(winnerContainer);
+            // FILL WITH NEW CONTENTS 
+            var winningImg = respObj_.image;
+            var addImg = document.createElement("img");
+
+        }
+
+        // END GAME 
         function endGame() {
             console.log("GAME ENDED!");
         }
-
     </script>
 
-    <script type="text/javascript">
-        let current_image_field;
+    <script type="text/javascript">let current_image_field;
         const editor_panel_title = document.getElementById('panel-title-field');
         let FIELD = 'none';
 
         // send to PreviewMemeServlet
-        // Defaults:
+        // Defaults: 
         let previewMemeJson = {
             alignmentY: 'TOP',
             alignmentX: 'CENTER',
@@ -347,18 +427,18 @@
             fontStyle: 'plain',
             text: ''
 
-        }; 
+        };
 
         function PreviewMemeServlet() {
-        	$.ajax({
-        		type: 'POST',
-      		  	url: "PreviewMemeServlet",
-      		  	data: previewMemeJson,
+            $.ajax({
+                type: 'POST',
+                url: "PreviewMemeServlet",
+                data: previewMemeJson,
                 success: function (result) {
-                	let resultObj = JSON.parse(result);
-                	let b64Image = resultObj.image;
-                	let dataURL = "data:image/png;base64," + b64Image;
-                	$("#loaded_image").attr("src", dataURL);
+                    let resultObj = JSON.parse(result);
+                    let b64Image = resultObj.image;
+                    let dataURL = "data:image/png;base64," + b64Image;
+                    $("#loaded_image").attr("src", dataURL);
                 }
             });
         }
@@ -393,7 +473,7 @@
             previewMemeJson.text = inner_text;
             PreviewMemeServlet();
         }
-        
+
         function editChangeFontSize(sizeClass) {
             if (current_image_field != null) {
                 previewMemeJson.size = sizeClass;
@@ -410,8 +490,8 @@
 
         function editChangeFontFamily(fontClass) {
             if (current_image_field != null) {
-                 previewMemeJson.font = fontClass;
-                 PreviewMemeServlet();
+                previewMemeJson.font = fontClass;
+                PreviewMemeServlet();
             }
         }
 
@@ -423,7 +503,7 @@
         }
 
         function editChangeFontOutline(outlineClass) {
-        	//TODO make this change json
+            //TODO make this change json
             if (current_image_field != null) {
                 switch (outlineClass) {
                     case 'none':
@@ -443,11 +523,8 @@
                         break;
                 }
             }
-        }
-    </script>
+        }</script>
 </body>
-<script type="text/javascript">
-    whateverYouWantToNameIt();
-</script>
+<script type="text/javascript">whateverYouWantToNameIt();</script>
 
 </html>
