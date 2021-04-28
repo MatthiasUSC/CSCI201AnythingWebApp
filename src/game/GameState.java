@@ -11,20 +11,21 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import sessionAttributes.SessionAttributeKeys;
 
-interface Action {CharSequence action(final Room r) throws IOException;}
+interface Action {CharSequence action(final Room r,final Player p) throws IOException;}
 public enum GameState {
-    JOIN(r -> new StringBuilder(",\"code\":").append(r.code).append(',').append(r.playerJSON())),
-    START(r -> new StringBuilder(",\"image\":\"").append(encode(r.getRoundImage())).append('"')),
-    TIMEOUT(r -> {
+    JOIN((r,p) -> new StringBuilder(",\"code\":").append(r.code).append(',').append(r.playerJSON())),
+    START((r,p) -> new StringBuilder(",\"judge\":").append(p.id == r.judge).append(",\"image\":\"").append(encode(r.getRoundImage())).append('"')),
+    TIMEOUT((r,p) -> {
         final StringJoiner join = new StringJoiner("\",\"","\"","\"");
         for(final byte i : r.scramble) join.add(encode(r.finished[i]));
         return new StringBuilder(",\"images\":[").append(join.toString()).append(']');
     }),
-    JUDGE(r -> "\"winner\":" + Integer.toString(r.winner)),
-    END(r -> "");
+    JUDGE((r,p) -> new StringBuilder(",\"winner\":\"").append(encode(r.winner)).append('"')),
+    END((r,p) -> "");
     
     private static final Encoder B64 = Base64.getEncoder();
     private static String encode(final BufferedImage i) throws IOException {
@@ -40,7 +41,10 @@ public enum GameState {
         o.getWriter().append("{\"event\":\"")
                      .append(toString())
                      .append("\"")
-                     .append(action.action((Room)i.getSession().getAttribute(SessionAttributeKeys.Room.toString())))
+                     .append(action.action(
+                         (Room)i.getSession().getAttribute(SessionAttributeKeys.Room.toString()),
+                         (Player)i.getSession().getAttribute(SessionAttributeKeys.Player.toString())
+                     ))
                      .append('}');
         if(this == END) {
             final HttpSession s = i.getSession();
