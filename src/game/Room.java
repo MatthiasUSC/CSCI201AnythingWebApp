@@ -114,8 +114,8 @@ public class Room {
     }
     
     private void run() throws InterruptedException {
-        broadcast(GameState.START);
         for(byte i = 0;i < add;++i) if(i != judge) players[i].round = new ImageHistory(getRoundImage());
+        broadcast(GameState.START);
         
         TimeUnit.SECONDS.sleep(timeLimit);
         
