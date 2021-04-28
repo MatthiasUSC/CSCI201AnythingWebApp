@@ -253,7 +253,7 @@
                             break;
                         case event.JUDGE:
                             windows.JUDGEWINDOW.style.display = 'block';
-                            displayImage(respObj);
+                            displayWinningImage(respObj);
                             break;
                         case event.TIMEOUT:
                             var isJudge = respObj.judge; // Bool returned from long poll
@@ -339,6 +339,7 @@
         function displayStart(respObj_) {
             var currImg = respObj_.image;   // extract current image
             const imageContainer = document.getElementById("loaded_image");
+            currImg += "data:image/png;base64,";
             imageContainer.setAttribute("src", currImg);
         }
 
@@ -353,6 +354,7 @@
             for (image in images) {
                 var judgeImg = document.createElement("img");
                 judgeImg.setAttribute("class", "judge-img");
+                image += "data:image/png;base64,";
                 judgeImg.setAttribute("src", image);
                 timeoutJudgeContainer.appendChild(judgeImg);
             }
@@ -386,19 +388,23 @@
             for (image in images) {
                 var playerImg = document.createElement("img");
                 playerImg.setAttribute("class", "timeout-img");
+                image += "data:image/png;base64,";
                 playerImg.setAttribute("src", image);
                 timeoutJudgeContainer.appendChild(playerImg);
             }
         }
 
         // SHOW WINNER
-        function displayImages(respObj_) {
+        function displayWinningImage(respObj_) {
             const winnerContainer = document.getElementById("playerContainer");
             // PURGE INSIDE FROM PREVIOUS ROUNDS
             cleanInside(winnerContainer);
             // FILL WITH NEW CONTENTS 
             var winningImg = respObj_.image;
+            winningImg += "data:image/png;base64,";
             var addImg = document.createElement("img");
+            addImg.setAttribut('src', winningImg);
+            
 
         }
 
