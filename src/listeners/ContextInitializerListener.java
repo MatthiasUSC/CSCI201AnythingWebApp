@@ -10,8 +10,8 @@ import resources.Registry;
 public class ContextInitializerListener implements ServletContextListener {
     /*public void contextInitialized(final ServletContextEvent sce) {}*/
 	
-    @Override
+    /*@Override
     public void contextDestroyed(final ServletContextEvent sce) {
         Registry.MONGO.close();
-    }
+    }*/
 }
