@@ -276,7 +276,7 @@
                         case event.TIMEOUT:
                             var isJudge = respObj.judge; // Bool returned from long poll
                             if (isJudge) {
-                                document.getElementById("choose-winner-button").disabled = true;
+                                document.getElementById("choose-winner-button").disabled = false;
                                 windows.TIMEOUTWINDOW_JUDGE.style.display = 'block';
                                 displayJudgeTimeout(respObj);
                             }
