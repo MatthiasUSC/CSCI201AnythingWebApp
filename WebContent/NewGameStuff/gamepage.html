@@ -61,9 +61,9 @@
                             X-Align <div class="caret"></div>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('left');">Left</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('right');">Right</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('center');">Center</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('LEFT');">Left</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('RIGHT');">Right</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('CENTER');">Center</a></li>
                         </ul>
                     </div>
                 </div>
@@ -422,9 +422,10 @@
             // PURGE INSIDE FROM PREVIOUS ROUNDS
             cleanInside(winnerContainer);
             // FILL WITH NEW CONTENTS 
-            var winningImg = "data:image/png;base64," + respObj_.image;
+            var winningImg = "data:image/png;base64," + respObj_.winner;
             var addImg = document.createElement("img");
-            addImg.setAttribut('src', winningImg);
+            addImg.setAttribute('src', winningImg);
+            winnerContainer.appendChild(addImg);
         }
 
         // END GAME 
