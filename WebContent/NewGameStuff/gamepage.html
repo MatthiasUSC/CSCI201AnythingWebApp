@@ -367,15 +367,17 @@
             // Adding event listener
             $('.judge-img').click(function () {
                 console.log("Image clicked");
-                if ($(this)[0].hasAttribute("id")) {
+                //if ($(this)[0].hasAttribute("id")) {
+                if(imageSelected) {
                     $(this).removeAttr('id');
                     imageSelected = false;
                 }
 
-                else if (!imageSelected) {
+                else {//if (!imageSelected) {
                     imageSelected = true;
                     $(this).attr('id', 'judge-img-selected'); // removes the previous selected class 
                     selectedImgId = $(this).data('data-imgId');
+                    console.log("selectedImgId:"+selectedImgId);
                 }
             });
 
@@ -383,7 +385,7 @@
 
         // JUDGING WINDOW (JUDGE)--> WINNER SELECTION  
         let imageSelected = false;
-       	var selectedImgId;
+       	var selectedImgId = null;
         
         // ON SUBMIT BUTTON CLICK
         function sendWinner() {
