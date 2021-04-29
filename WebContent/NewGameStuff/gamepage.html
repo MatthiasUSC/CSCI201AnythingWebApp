@@ -47,11 +47,11 @@
             <div class="image-container">
                 <img class="image" id="loaded_image" src="" />
                 <div class="image-fields">
-                    <div id="header" onclick="setCurrentImageField('header');">Header</div>
-                    <div id="top" onclick="setCurrentImageField('top');">Top</div>
-                    <div id="middle" onclick="setCurrentImageField('middle');">Middle</div>
-                    <div id="bottom" onclick="setCurrentImageField('bottom');">Bottom</div>
-                    <div id="footer" onclick="setCurrentImageField('footer');">Footer</div>
+                    <div id="header" onclick="setCurrentImageField('header');"></div>
+                    <div id="top" onclick="setCurrentImageField('top');"></div>
+                    <div id="middle" onclick="setCurrentImageField('middle');"></div>
+                    <div id="bottom" onclick="setCurrentImageField('bottom');"></div>
+                    <div id="footer" onclick="setCurrentImageField('footer');"></div>
                 </div>
 
             </div>
@@ -75,9 +75,9 @@
                             Size <div class="caret"></div>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize(12);">Small</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize(18);">Medium</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize(24);">Large</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize(18);">Small</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize(36);">Medium</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize(48);">Large</a></li>
                         </ul>
                     </div>
                 </div>
@@ -272,6 +272,7 @@
                                 displayJudgeTimeout(respObj);
                             }
                             else {
+                            	resetMemeJson();
                                 windows.TIMEOUTWINDOW_PLAYER.style.display = 'block';
                                 displayPlayerTimeout(respObj);
                             }
@@ -452,20 +453,26 @@
 
         // send to PreviewMemeServlet
         // Defaults: 
-        let previewMemeJson = {
-            alignmentY: 'TOP',
-            alignmentX: 'CENTER',
-            size: 12,
-            outlineSize: 1.0,
-            fillColor: '#FFFFFF',
-            outlineColor: '#000000',
-            headerBGColor: '#666666',
-            footerBGColor: '#666666',
-            font: 'Helvetica Neue',
-            fontStyle: 'plain',
-            text: ''
+        let previewMemeJson;
+        
+        function resetMemeJson() {
+        	document.getElementById('input-text').value = '';
+          	FIELD = 'none';
+        	previewMemeJson = {
+                    alignmentY: 'TOP',
+                    alignmentX: 'CENTER',
+                    size: 12,
+                    outlineSize: 1.0,
+                    fillColor: '#FFFFFF',
+                    outlineColor: '#000000',
+                    headerBGColor: '#666666',
+                    footerBGColor: '#666666',
+                    font: 'Helvetica Neue',
+                    fontStyle: 'plain',
+                    text: ''
 
-        };
+                };
+        }
 
         function PreviewMemeServlet() {
             $.ajax({
