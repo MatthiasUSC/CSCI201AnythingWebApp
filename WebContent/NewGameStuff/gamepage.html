@@ -358,7 +358,7 @@
                 
                 let currImg = "data:image/png;base64," + images[image];
                 judgeImg.setAttribute("src", currImg);
-                judgeImg.setAttribute('data-imgId', i);
+                $(judgeImg).data('data-imgId', i);
                 
                 timeoutJudgeContainer.appendChild(judgeImg);
                 i++;
