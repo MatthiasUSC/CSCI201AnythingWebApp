@@ -276,6 +276,7 @@
                         case event.TIMEOUT:
                             var isJudge = respObj.judge; // Bool returned from long poll
                             if (isJudge) {
+                                document.getElementById("choose-winner-button").disabled = true;
                                 windows.TIMEOUTWINDOW_JUDGE.style.display = 'block';
                                 displayJudgeTimeout(respObj);
                             }
@@ -413,7 +414,8 @@
         // ON SUBMIT BUTTON CLICK
         function sendWinner() {
         	if(selectedImgId != null){
-        		$.ajax({
+        		document.getElementById("choose-winner-button").disabled = true;
+        	    $.ajax({
             		url : "../JudgeImageServlet",
             		data : {
             			winner : selectedImgId
