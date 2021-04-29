@@ -56,12 +56,12 @@ public final class Registry {
         STYLES.put("plain",Font.PLAIN);
     }
     
-    public static final MongoClient MONGO;
+    /*public static final MongoClient MONGO;
     
     static {
         String s = "";
         try(final BufferedReader i = new BufferedReader(new FileReader(getResource("mongo.txt").toFile()))) {s = i.readLine();}
         catch(final IOException e) {e.printStackTrace(); System.out.println("Could not get the MongoDB info."); System.exit(1);}
         MONGO  = MongoClients.create(s);
-    }
+    }*/
 }
