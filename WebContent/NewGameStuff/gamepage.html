@@ -363,33 +363,41 @@
                 timeoutJudgeContainer.appendChild(judgeImg);
                 i++;
             }
+            
+            // Adding event listener
+            $('.judge-img').click(function () {
+                console.log("Image clicked");
+                if ($(this)[0].hasAttribute("id")) {
+                    $(this).removeAttr('id');
+                    imageSelected = false;
+                }
+
+                else if (!imageSelected) {
+                    imageSelected = true;
+                    $(this).attr('id', 'judge-img-selected'); // removes the previous selected class 
+                    selectedImgId = $(this).data('data-imgId');
+                }
+            });
 
         }
 
         // JUDGING WINDOW (JUDGE)--> WINNER SELECTION  
         let imageSelected = false;
        	var selectedImgId;
-        $('.judge-img').click(function () {
-            console.log("Image clicked");
-            if ($(this)[0].hasAttribute("id")) {
-                $(this).removeAttr('id');
-                imageSelected = false;
-            }
-
-            else if (!imageSelected) {
-                imageSelected = true;
-                $(this).attr('id', 'judge-img-selected'); // removes the previous selected class 
-                selectedImgId = $(this).data('data-imgId');
-            }
-        });
         
+        // ON SUBMIT BUTTON CLICK
         function sendWinner() {
-        	$.ajax({
-        		url : "../JudgeImageServlet",
-        		data : {
-        			winner : selectedImgId
-        		}
-        	});
+        	if(selectedImgId != null){
+        		$.ajax({
+            		url : "../JudgeImageServlet",
+            		data : {
+            			winner : selectedImgId
+            		}
+            	});
+        	} else {
+        		alert("NO IMAGE SELECTED!");
+        	}
+        	
         }
 
         //JUDGING WINDOW (PLAYER)
