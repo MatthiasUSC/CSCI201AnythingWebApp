@@ -137,7 +137,6 @@
             <div id="timeout-content-window">
                 <h1 id="judge-content-title">Waiting for judge...</h1>
                 <img class="timeout-img" src="background1.jpeg" />
-
             </div>
         </div>
     </div>
@@ -356,7 +355,7 @@
                 var judgeImg = document.createElement("img");
                 judgeImg.setAttribute("class", "judge-img");
                 
-                let currImg = "data:image/png;base64," + image;
+                let currImg = "data:image/png;base64," + images[image];
                 judgeImg.setAttribute("src", currImg);
                 judgeImg.setAttribute('data-imgId', i);
                 
@@ -389,14 +388,11 @@
         		data : {
         			winner : selectedImgId
         		}
-        		
-        		
         	});
         }
 
         //JUDGING WINDOW (PLAYER)
         function displayPlayerTimeout(respObj_) {
-            
             var images = respObj_.images;
             const timeoutJudgeContainer = document.getElementById("timeout-content-window");
             // PURGE INSIDE FROM PREVIOUS ROUNDS 
@@ -405,7 +401,7 @@
             for (image in images) {
                 var playerImg = document.createElement("img");
                 playerImg.setAttribute("class", "timeout-img");
-                let currImg = "data:image/png;base64," + image;
+                let currImg = "data:image/png;base64," + images[image];
                 playerImg.setAttribute("src", currImg);
                 timeoutJudgeContainer.appendChild(playerImg);
             }
