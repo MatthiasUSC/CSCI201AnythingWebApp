@@ -73,9 +73,9 @@
                             Size <div class="caret"></div>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize('sm');">Small</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize('md');">Medium</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize('lg');">Large</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize(12);">Small</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize(18);">Medium</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontSize(24);">Large</a></li>
                         </ul>
                     </div>
                 </div>
@@ -85,11 +85,11 @@
                             Outline Size <div class="caret"></div>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('none');">None</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('thin');">Light</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('regular');">Regular</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('thick');">Thick</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline('fat');">Thiccccc</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline(0);">None</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline(0.5);">Light</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline(1);">Regular</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline(2);">Thick</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="editChangeFontOutline(3);">Thiccccc</a></li>
 
                         </ul>
                     </div>
@@ -427,7 +427,7 @@
         }
     </script>
 
-    <script type="text/javascript">let current_image_field;
+    <script type="text/javascript">
         const editor_panel_title = document.getElementById('panel-title-field');
         let FIELD = 'none';
 
@@ -494,55 +494,30 @@
         }
 
         function editChangeFontSize(sizeClass) {
-            if (current_image_field != null) {
-                previewMemeJson.size = sizeClass;
-                PreviewMemeServlet();
-            }
+            previewMemeJson.size = sizeClass;
+            PreviewMemeServlet();
         }
 
         function editChangeXAlign(alignClass) {
-            if (current_image_field != null) {
-                previewMemeJson.alignmentX = alignClass;
-                PreviewMemeServlet();
-            }
+            previewMemeJson.alignmentX = alignClass;
+            PreviewMemeServlet();
         }
 
-        function editChangeFontFamily(fontClass) {
-            if (current_image_field != null) {
-                previewMemeJson.font = fontClass;
-                PreviewMemeServlet();
-            }
+        function editChangeFontFamily(fontSize) {
+            previewMemeJson.font = fontSize;
+            PreviewMemeServlet();
         }
 
         function editChangeFontStyle(styleClass) {
-            if (current_image_field != null) {
-                previewMemeJson.fontStyle = styleClass;
-                PreviewMemeServlet();
-            }
+            previewMemeJson.fontStyle = styleClass;
+            PreviewMemeServlet();
         }
 
-        function editChangeFontOutline(outlineClass) {
-            //TODO make this change json
-            if (current_image_field != null) {
-                switch (outlineClass) {
-                    case 'none':
-                        current_image_field.style.webkitTextStrokeWidth = '0pt';
-                        break;
-                    case 'thin':
-                        current_image_field.style.webkitTextStrokeWidth = '0.5pt';
-                        break;
-                    case 'regular':
-                        current_image_field.style.webkitTextStrokeWidth = '1pt';
-                        break;
-                    case 'thick':
-                        current_image_field.style.webkitTextStrokeWidth = '2pt';
-                        break;
-                    case 'fat':
-                        current_image_field.style.webkitTextStrokeWidth = '3pt';
-                        break;
-                }
-            }
-        }</script>
+        function editChangeFontOutline(outlineSize) {
+            previewMemeJson.outlineSize = outlineSize;
+            PreviewMemeServlet();
+        }
+        </script>
 </body>
 <script type="text/javascript">
 whateverYouWantToNameIt();
