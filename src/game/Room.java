@@ -140,16 +140,7 @@ public class Room {
         for(byte i = 0;i < scramble.length;++i) unscramble[scramble[i]] = scramble[i] > judge? (byte)(i - 1) : i;
         // get finished images
         finished = new BufferedImage[scramble.length];
-        System.out.println("judge:"+judge+" add:"+add);
-        for(byte p = 0;p < add;++p) {
-            if(p != judge){ 
-                System.out.println("p:"+p);
-                finished[
-                         scramble[p > judge? p - 1 : p]
-                                 ] = 
-                                 players[p].img;
-            }
-        }
+        for(byte p = 0;p < add;++p) if(p != judge) finished[scramble[p > judge? p - 1 : p]] = players[p].img;
         broadcast(GameState.TIMEOUT);
     }
     
