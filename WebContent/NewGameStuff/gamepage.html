@@ -257,6 +257,7 @@
                         	if(isJudge){
                         		windows.EDITWINDOW_JUDGE.style.display = 'block';
                         	} else {
+                        		resetMemeJson();
                         		windows.EDITWINDOW.style.display = 'block';
                                 displayStart(respObj);
                         	}
@@ -272,7 +273,6 @@
                                 displayJudgeTimeout(respObj);
                             }
                             else {
-                            	resetMemeJson();
                                 windows.TIMEOUTWINDOW_PLAYER.style.display = 'block';
                                 displayPlayerTimeout(respObj);
                             }
