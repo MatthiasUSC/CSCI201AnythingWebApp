@@ -12,9 +12,6 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientOptions;
-import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 

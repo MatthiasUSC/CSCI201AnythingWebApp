@@ -36,7 +36,7 @@ class StarterThread extends Thread {
 
 public class Room {
     //private static final long JUDGE_TIMEOUT = 60L;
-	private static final short LOBBY_BUFFER = 5;
+	private static final short LOBBY_BUFFER = 10;
     private static final short ROUND_BUFFER = 5;
     private static final short MAX_CODE = 10000;
     private static short CODE = 0;
@@ -124,7 +124,7 @@ public class Room {
         scramble = new byte[add - 1];
         unscramble = new byte[add];
         for(byte i = 0;i < judge;++i) scramble[i] = i;
-        for(byte i = judge;i < add - 1;scramble[i] = ++i);
+        for(byte i = judge;i < add - 1;scramble[i] = i++);
         {
             final ThreadLocalRandom r = ThreadLocalRandom.current();
             for(byte i = (byte)(scramble.length - 1);i > 0;--i) {
@@ -140,7 +140,16 @@ public class Room {
         for(byte i = 0;i < scramble.length;++i) unscramble[scramble[i]] = scramble[i] > judge? (byte)(i - 1) : i;
         // get finished images
         finished = new BufferedImage[scramble.length];
-        for(byte p = 0;p < add;++p) if(p != judge) finished[scramble[p]] = players[p].img;
+        System.out.println("judge:"+judge+" add:"+add);
+        for(byte p = 0;p < add;++p) {
+            if(p != judge){ 
+                System.out.println("p:"+p);
+                finished[
+                         scramble[p > judge? p - 1 : p]
+                                 ] = 
+                                 players[p].img;
+            }
+        }
         broadcast(GameState.TIMEOUT);
     }
     
