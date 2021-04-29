@@ -310,8 +310,11 @@
             var playerObjList = respObj_.players;
             console.log("Player List: " + playerObjList);
             const lobbyContainer = document.getElementById("lobby-container");
+            
+            cleanInside(lobbyContainer);
 
-            for (player in playerObjList) {
+            for (i in playerObjList) {
+            	let player = playerObjList[i];
                 // Make new player card 
                 var playercard = document.createElement("div");
                 playercard.setAttribute("class", "player-card");
