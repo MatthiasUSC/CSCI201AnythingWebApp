@@ -27,7 +27,7 @@ public class Player {
                                      final Color fill,final Color outline,final Color bgH,final Color bgF,final Font f,
                                      final int style,final char...text) {
         round.pushState(y,x,size,outlineSize,fill,outline,bgH,bgF,f,style,text);
-        return round.getImage();
+        return img = round.getImage();
     }
     
     public boolean isJudge() {return r.getJudge() == id;}
