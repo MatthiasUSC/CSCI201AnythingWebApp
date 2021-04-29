@@ -58,8 +58,8 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('HEAD');">Header</a></li>
                             <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('TOP');">Top</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('MIDDLE');">Middle</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('BOTTOM');">Bottom</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('MID');">Middle</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('LOW');">Bottom</a></li>
                             <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('FOOT');">Footer</a></li>
                         </ul>
                     </div>
@@ -501,27 +501,7 @@
         }
 
         function setCurrentImageField(element_id) {
-            /*switch (element_id) {
-                case 'header':
-                    FIELD = 'HEAD';
-                    break;
-                case 'top':
-                    FIELD = 'TOP';
-                    break;
-                case 'middle':
-                    FIELD = 'MID';
-                    break;
-                case 'bottom':
-                    FIELD = 'LOW';
-                    break;
-                case 'footer':
-                    FIELD = 'FOOT';
-                    break;
-                default:
-                    FIELD = 'none';
-                    break;
-            }*/
-            previewMemeJson.alignmentY = FIELD;
+            previewMemeJson.alignmentY = element_id;
             PreviewMemeServlet();
         }
 
