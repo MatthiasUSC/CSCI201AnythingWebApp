@@ -91,7 +91,7 @@ public class Room {
     
     private void broadcast(final GameState s) {
         state = s;
-        for(byte p = 0;p < add;++p) players[p].eventQ.add(state);
+        for(byte p = 0;p < add;++p) players[p].eventQ.offer(state);
     }
     
     public void triggerStartCountdown() {
