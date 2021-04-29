@@ -1,11 +1,13 @@
 @charset "UTF-8";
 
 .image-workspace {
-    height: 1000px;
-    width: 1000px;
+    height: 90%;
+    width: 80%;
     margin: 0 auto;
-    position: relative;
-    background-color: lightgrey;
+    position: absolute;
+	top : 5%;
+    background-color: #e2e6fb;
+    border-radius : 10pt;
 }
 
 .image-container {
@@ -33,7 +35,7 @@
     position: absolute;
 }
 .side-panel {
-    height: 700px;
+    height: 90%;
     width: 400px;
     position: absolute;
     display: flex;
@@ -42,7 +44,8 @@
     right: 0px;
     margin-top: 10px;
     margin-right: 10px;
-    background-color: grey;
+    background-color: #939ddb;
+    border-radius : 10pt;
     padding-top: 60px;
 }
 
@@ -53,7 +56,7 @@
     display: block;
     left: 0px;
     margin: 10px;
-    background-color: darkgray;
+    background-color: #848dc9;
 }
 
 .editor-text {
@@ -120,6 +123,7 @@
 #panel-title {
     position: absolute;
     top: 0;
+    font-size : 24pt;
 }
 #input-text {
     display: inline-block;

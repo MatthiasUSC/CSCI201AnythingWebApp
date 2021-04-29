@@ -23,16 +23,18 @@
         .window-container {
             width: 100%;
             height: 100%;
+            display : flex;
+            justify-content : center;
         }
     </style>
 </head>
 <body>
 
     <!--LOBBY CONTAINER-->
-    <div class="window-container" id="lobby" style="display: none;">
+    <div class="window-container" id="lobby" style="display : none;">
     	<h3 id="roomcode-display"></h3>
         <div id="lobby-container">
-            <!--<div class="player-card" id="">
+            <!-- <div class="player-card" id="">
                 <h3 class="player-status">Host</h3>
                 <h1 class="player-card-name">Yo Mamma</h1>
             </div>-->
@@ -137,6 +139,10 @@
             <div id="timeout-content-window">
                 <h1 id="judge-content-title">Waiting for judge...</h1>
                 <img class="timeout-img" src="background1.jpeg" />
+                <img class="timeout-img" src="background1.jpeg" />
+                <img class="timeout-img" src="background1.jpeg" />
+                <img class="timeout-img" src="background1.jpeg" />
+                <img class="timeout-img" src="background1.jpeg" />
             </div>
         </div>
     </div>
@@ -159,7 +165,7 @@
     </div>
     
     <!--JUDGE'S PICK CONTAINER-->
-    <div class="window-container" id="show-winner" style="display:none;">
+    <div class="window-container" id="show-winner" style="display: none;">
         <h3>The Winner : </h3>
         <div id="playerContainer" style="width:80%;margin-left:auto;margin-right:auto;justify-content: center;text-align:center;">
             <h1 id="winnerID"></h1>

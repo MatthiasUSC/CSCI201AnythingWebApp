@@ -29,6 +29,7 @@
     background-color: #939ddb;
     display: inline-flex;
     flex-direction: column;
+    justify-content : center;
     align-items: center;
     position: relative;
 }
@@ -43,8 +44,7 @@
 }
 
 .player-card-name {
-    position: absolute;
-    top: 20%;
+    font-size : 24pt;
 }
 
 #background-fill {

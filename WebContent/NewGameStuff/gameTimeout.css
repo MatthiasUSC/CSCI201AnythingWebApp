@@ -10,8 +10,9 @@ html, body {
     position: absolute;
     height: 85%;
     width: 80%;
-    top: 70px;
+    top: 15%;
     background-color: white;
+    border-radius: 10pt;
     margin: 0 auto;
     justify-content: center;
     align-items: center;
@@ -39,6 +40,7 @@ html, body {
 
 #judge-content-title {
     position: absolute;
+    font-size : 26pt;
     top: 0px;
     margin-bottom: 50px;
     margin-top: 5px;
