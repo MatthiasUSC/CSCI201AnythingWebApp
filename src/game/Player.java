@@ -29,6 +29,7 @@ public class Player {
         round.pushState(y,x,size,outlineSize,fill,outline,bgH,bgF,f,style,text);
         return img = round.getImage();
     }
+    void setRound() {round = new ImageHistory(img = r.getRoundImage());}
     
     public boolean isJudge() {return r.getJudge() == id;}
     

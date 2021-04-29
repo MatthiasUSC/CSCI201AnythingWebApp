@@ -4,15 +4,10 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-import image.ImageHistory;
 import util.container.BitSet;
-
-
-
 
 class StarterThread extends Thread {
 	private Room room;
@@ -35,16 +30,13 @@ class StarterThread extends Thread {
 }
 
 public class Room {
-    //private static final long JUDGE_TIMEOUT = 60L;
 	private static final short LOBBY_BUFFER = 10;
     private static final short ROUND_BUFFER = 5;
     private static final short MAX_CODE = 10000;
     private static short CODE = 0;
     private static final BitSet ALLOCATED = new BitSet(MAX_CODE);
     private static final Map<Short,Room> LOBBIES = new HashMap<>();
-    //private static final Map<UUID,Room> REGISTRY = new HashMap<>(); //TODO do we need this?
     
-    final UUID uuid = UUID.randomUUID();
     private byte add = 0,round = 0,judge = 0;
     public BufferedImage winner = null;
     private final BufferedImage[] images;
@@ -108,14 +100,13 @@ public class Room {
     }
     
     public void start() throws InterruptedException {
-        //REGISTRY.put(uuid,this);
         LOBBIES.remove(code);
         ALLOCATED.clear(code);
         run();
     }
     
     private void run() throws InterruptedException {
-        for(byte i = 0;i < add;++i) if(i != judge) players[i].round = new ImageHistory(getRoundImage());
+        for(byte i = 0;i < add;++i) if(i != judge) players[i].setRound();
         broadcast(GameState.START);
         
         TimeUnit.SECONDS.sleep(timeLimit);
@@ -147,14 +138,9 @@ public class Room {
     public void setWinner(final byte b) throws InterruptedException {
         winner = finished[unscramble[b] - (b > judge? 1 : 0)];
         broadcast(GameState.JUDGE);
-        if(++round == rounds) {
-            ++judge;
-            broadcast(GameState.END);
-            //REGISTRY.remove(uuid);
-        } else {
-            TimeUnit.SECONDS.sleep(ROUND_BUFFER);
-            run();
-        }
+        TimeUnit.SECONDS.sleep(ROUND_BUFFER);
+        if(++round == rounds) broadcast(GameState.END);
+        else {judge = (byte)((1 + judge) % add); run();}
     }
     byte getJudge() {return judge;}
     public BufferedImage getRoundImage() {return images[roundImages[round]];}
