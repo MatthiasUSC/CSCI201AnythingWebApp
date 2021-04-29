@@ -325,11 +325,9 @@
                 var playerCardStatus = document.createElement("h3");
                 playerCardStatus.setAttribute("class", "player-status");
 
-                playerCardName.innerHTML = player.name;  // player username
-                var playerStatus = "player"; // host or player
-                if (player.id == 0) {  // player is host
-                    playerStatus = "host";
-                }
+                playerCardName.innerHTML = player;  // player username
+                
+                var playerStatus = "player";
                 playerCardStatus.innerHTML = playerStatus;
 
                 playercard.appendChild(playerCardStatus);
