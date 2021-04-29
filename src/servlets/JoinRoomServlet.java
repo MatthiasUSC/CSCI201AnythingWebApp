@@ -32,7 +32,7 @@ public class JoinRoomServlet extends HttpServlet {
         couldNotJoin,couldNotCreate;
         
         private void respond(final HttpServletResponse r) throws IOException {
-            r.getWriter().append(Integer.toString(ordinal()));
+            r.getWriter().append(toString());
         }
     }
     
