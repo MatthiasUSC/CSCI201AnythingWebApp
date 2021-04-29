@@ -30,7 +30,7 @@ class StarterThread extends Thread {
 }
 
 public class Room {
-	private static final short LOBBY_BUFFER = 10;
+	private static final short LOBBY_BUFFER = 20;
     private static final short ROUND_BUFFER = 5;
     private static final short MAX_CODE = 10000;
     private static short CODE = 0;
@@ -91,7 +91,7 @@ public class Room {
     
     private void broadcast(final GameState s) {
         state = s;
-        for(byte p = 0;p < add;++p) players[p].eventQ.add(state);
+        for(byte p = 0;p < add;++p) players[p].eventQ.offer(state);
     }
     
     public void triggerStartCountdown() {
