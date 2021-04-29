@@ -30,7 +30,7 @@ class StarterThread extends Thread {
 }
 
 public class Room {
-	private static final short LOBBY_BUFFER = 10;
+	private static final short LOBBY_BUFFER = 20;
     private static final short ROUND_BUFFER = 5;
     private static final short MAX_CODE = 10000;
     private static short CODE = 0;
