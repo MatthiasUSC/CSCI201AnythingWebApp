@@ -74,13 +74,14 @@ public class JoinRoomServlet extends HttpServlet {
                     room.triggerStartCountdown();
                     break;
                 case join:
-                	room = Room.getLobby(Byte.parseByte(request.getParameter(ROOM_CODE_PARAMETER)));
+                	room = Room.getLobby(Short.parseShort(request.getParameter(ROOM_CODE_PARAMETER)));
                 	break;
             };
             if(room == null) {Err.couldNotJoin.respond(response); return;}
             final HttpSession session = request.getSession();
             session.setAttribute(SessionAttributeKeys.Player.toString(),room.addPlayer(request.getParameter(NAME_PARAM)));
             session.setAttribute(SessionAttributeKeys.Room.toString(),room);
+            
         } catch(final Exception e) {
             e.printStackTrace();
             Err.couldNotCreate.respond(response);

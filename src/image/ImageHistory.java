@@ -31,6 +31,7 @@ public class ImageHistory {
             
             /** Writes the sub-state to the graphics object. */
             private final void apply(final Graphics2D g,final AlignmentY y) {
+                if(i == null) return;
                 final int dx = switch(x) {
                     case LEFT -> 0;
                     case CENTER -> (bw - w + 1) / 2;
@@ -120,7 +121,7 @@ public class ImageHistory {
         if(bgH != null) current.bgH = bgH.getRGB();
         if(bgF != null) current.bgF = bgF.getRGB();
         final int[] s = new int[] {bw,size};
-        current.setSubState(y,x,TextUtil.charsToImage(s,outlineSize,fill,outline,f,style,text),s[0],s[1]);
+        current.setSubState(y,x,text.length == 0? null : TextUtil.charsToImage(s,outlineSize,fill,outline,f,style,text),s[0],s[1]);
     }
     /** Pushes the current state to the redo stack and pops the undo stack to current state. */
     public void undo() {
