@@ -46,35 +46,17 @@
         <div class="image-workspace">
             <div class="image-container">
                 <img class="image" id="loaded_image" src="" />
+                <div class="image-fields">
+                    <div id="header" onclick="setCurrentImageField('header');"></div>
+                    <div id="top" onclick="setCurrentImageField('top');"></div>
+                    <div id="middle" onclick="setCurrentImageField('middle');"></div>
+                    <div id="bottom" onclick="setCurrentImageField('bottom');"></div>
+                    <div id="footer" onclick="setCurrentImageField('footer');"></div>
+                </div>
+
             </div>
             <div class="side-panel">
                 <h1 id="panel-title">Editor <span id="panel-title-field"></span></h1>
-                <div class="editor-option">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Y-Align <div class="caret"></div>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('HEAD');">Header</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('TOP');">Top</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('MIDDLE');">Middle</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('BOTTOM');">Bottom</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="setCurrentImageField('FOOT');">Footer</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="editor-option">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            X-Align <div class="caret"></div>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('LEFT');">Left</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('RIGHT');">Right</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="editChangeXAlign('CENTER');">Center</a></li>
-                        </ul>
-                    </div>
-                </div>
                 <div class="editor-option">
                     <div class="dropdown">
                         <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -259,11 +241,11 @@
                             displayLobby(respObj);
                             break;
                         case event.START:
+                            resetMemeJson();
                         	var isJudge = respObj.judge;
                         	if(isJudge){
                         		windows.EDITWINDOW_JUDGE.style.display = 'block';
                         	} else {
-                        		resetMemeJson();
                         		windows.EDITWINDOW.style.display = 'block';
                                 displayStart(respObj);
                         	}
@@ -385,7 +367,7 @@
             $('.judge-img').click(function () {
                 console.log("Image clicked");
                 //if ($(this)[0].hasAttribute("id")) {
-                if(imageSelected) {
+                /*if(imageSelected) {
                     $(this).removeAttr('id');
                     imageSelected = false;
                 }
@@ -395,7 +377,12 @@
                     $(this).attr('id', 'judge-img-selected'); // removes the previous selected class 
                     selectedImgId = $(this).data('data-imgId');
                     console.log("selectedImgId:"+selectedImgId);
-                }
+                }*/
+                const prev = document.getElementById("judge-img-selected");
+                if(prev) prev.removeAttribute("id");
+                $(this).attr("id","judge-img-selected");
+                selectedImgId = $(this).data("data-imgId");
+                console.log("selectedImgId:"+selectedImgId);
             });
 
         }
@@ -495,6 +482,26 @@
         }
 
         function setCurrentImageField(element_id) {
+            /*switch (element_id) {
+                case 'header':
+                    FIELD = 'HEAD';
+                    break;
+                case 'top':
+                    FIELD = 'TOP';
+                    break;
+                case 'middle':
+                    FIELD = 'MID';
+                    break;
+                case 'bottom':
+                    FIELD = 'LOW';
+                    break;
+                case 'footer':
+                    FIELD = 'FOOT';
+                    break;
+                default:
+                    FIELD = 'none';
+                    break;
+            }*/
             previewMemeJson.alignmentY = FIELD;
             PreviewMemeServlet();
         }
