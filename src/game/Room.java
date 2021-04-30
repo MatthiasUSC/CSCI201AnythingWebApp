@@ -89,9 +89,9 @@ public class Room {
         return null;
     }
     
-    private void broadcast(final GameState s) {
+    private void broadcast(final GameState s) throws InterruptedException {
         state = s;
-        for(byte p = 0;p < add;++p) players[p].eventQ.offer(state);
+        for(byte p = 0;p < add;++p) players[p].eventQ.put(state);
     }
     
     public void triggerStartCountdown() {
@@ -121,14 +121,14 @@ public class Room {
             for(byte i = (byte)(scramble.length - 1);i > 0;--i) {
                 final byte t;
                 {
-                    final byte j = (byte)(r.nextInt() % (i + 1));
+                    final byte j = (byte)r.nextInt(i + 1);
                     t = scramble[j];
                     scramble[j] = scramble[i];
                 }
                 scramble[i] = t;
             }
         }
-        for(byte i = 0;i < scramble.length;++i) unscramble[scramble[i]] = scramble[i] > judge? (byte)(i - 1) : i;
+        for(byte i = 0;i < scramble.length;++i) unscramble[scramble[i]] = i;
         // get finished images
         finished = new BufferedImage[scramble.length];
         for(byte p = 0;p < add;++p) if(p != judge) finished[scramble[p > judge? p - 1 : p]] = players[p].img;
@@ -136,7 +136,7 @@ public class Room {
     }
     
     public void setWinner(final byte b) throws InterruptedException {
-        winner = finished[unscramble[b] - (b > judge? 1 : 0)];
+        winner = finished[unscramble[b + (b == judge? 1 : 0)]];
         broadcast(GameState.JUDGE);
         TimeUnit.SECONDS.sleep(ROUND_BUFFER);
         if(++round == rounds) broadcast(GameState.END);

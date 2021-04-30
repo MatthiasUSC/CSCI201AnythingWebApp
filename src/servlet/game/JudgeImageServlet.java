@@ -23,6 +23,6 @@ public class JudgeImageServlet extends HttpServlet {
 	    try {
 	        ((Room)request.getSession().getAttribute(SessionAttributeKeys.Room.toString()))
 	        .setWinner(Byte.parseByte(request.getParameter(WINNER_PARAM)));
-	    } catch(final Exception e) {}
+	    } catch(final Exception e) {e.printStackTrace();}
 	}
 }
