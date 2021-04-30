@@ -9,4 +9,5 @@ IMPORTANT RULES TO HAVE A SMOOTH EXPERIENCE:
 4. Don't test with only one player, it doesn't work.
 5. For any create room field, please don't put in any number that is bigger than 255, or any negative number
 6. The lobby phase lasts for 20 seconds, so you gotta make sure all the players have joined the room before then.
-7. Have fun with Caption That®!
+7. When editing images, don't input too much text into the text box.
+8. Have fun with Caption ThatÂ®!
